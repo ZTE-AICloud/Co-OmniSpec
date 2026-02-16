@@ -1,0 +1,539 @@
+# Few-shot 模板配置
+# 版本: 1.0
+# 说明: Few-shot 示例模板配置（包含识别规则和格式定义两部分）
+
+version: "1.0"
+description: "Few-shot 示例模板配置（系统默认）"
+
+# ============================================
+# 支持的接口类型清单
+# ============================================
+# 以下列出了所有支持的接口类型，您可以根据项目需求选择要反构的接口类型
+# 如果配置文件中只包含 cli 类型，则只会识别和生成 cli 类型的接口，其他类型将被忽略
+#
+# 支持的接口类型：
+#   - restful: RESTful API 接口（基于 HTTP 的 RESTful 接口，通常使用 @app.route、@RequestMapping、@GetMapping 等装饰器/注解）
+#   - message: 消息类接口（消息队列、事件总线、消息订阅等接口，如 @RabbitListener、@KafkaListener、subscribe() 等）
+#   - module: 模块间接口（模块间调用的公共接口，如服务接口、内部 API，通过跨模块调用模式识别）
+#   - cli: 命令行接口（命令行工具、CLI 命令接口，如 @click.command()、argparse、CommandLineRunner 等）
+#   - rpc: RPC 接口（远程过程调用接口，如 gRPC、Thrift、Dubbo 等）
+#   - function: 函数接口（普通的函数或方法，不涉及网络调用或特殊装饰器）
+#   - other: 其他类型接口（无法明确分类的接口）
+#
+# 配置说明：
+#   1. 在 interface_types 下只配置您需要反构的接口类型
+#   2. 如果只配置 cli 类型，则只会识别和生成 cli 类型的接口
+#   3. 每个接口类型可以配置 constraints（约束规则），使用自然语言描述即可
+#   4. AI Agent 会自动将自然语言约束规则转换为检索规则
+# ============================================
+
+# ============================================
+# 第一部分：接口识别规则和约束信息（用户可配置）
+# ============================================
+identification_rules:
+  # 全局规则配置
+  global:
+    # 规则优先级：high（高优先级）、medium（中优先级）、low（低优先级）
+    rule_priority: "high"
+
+    # 语言特定配置
+    language_specific:
+      python:
+        frameworks: ["Flask", "FastAPI", "Django"]
+        default_framework: "Flask"
+      java:
+        frameworks: ["Spring Boot", "JAX-RS"]
+        default_framework: "Spring Boot"
+      javascript:
+        frameworks: ["Express", "Koa", "NestJS"]
+        default_framework: "Express"
+      typescript:
+        frameworks: ["Express", "NestJS", "Fastify"]
+        default_framework: "Express"
+      go:
+        frameworks: ["Gin", "Echo", "Fiber"]
+        default_framework: "Gin"
+      c:
+        frameworks: ["原生 C", "5G/5GC 网元"]
+        default_framework: "原生 C"
+      cpp:
+        frameworks: ["原生 C++", "5G/5GC 网元"]
+        default_framework: "原生 C++"
+
+  # 业务语义提取规则
+  business_semantics_extraction:
+    # 业务名称生成规则
+    business_name_rules:
+      # 基于函数名的业务名称转换
+      function_name_conversion:
+        # CRUD操作转换
+        - pattern: "^(get|fetch|retrieve)(.*)"
+          replacement: "获取$2信息"
+          description: "查询操作转换为获取信息"
+        - pattern: "^(create|add|insert)(.*)"
+          replacement: "创建$2"
+          description: "创建操作转换为创建"
+        - pattern: "^(update|modify|change)(.*)"
+          replacement: "更新$2"
+          description: "更新操作转换为更新"
+        - pattern: "^(delete|remove)(.*)"
+          replacement: "删除$2"
+          description: "删除操作转换为删除"
+        - pattern: "^(list|query)(.*)"
+          replacement: "查询$2列表"
+          description: "列表查询转换为查询列表"
+
+      # 基于参数的业务名称增强
+      parameter_enhancement:
+        - pattern: "id"
+          enhancement: "根据ID"
+          description: "ID参数增强业务语义"
+        - pattern: "userId"
+          enhancement: "根据用户ID"
+          description: "用户ID参数增强业务语义"
+        - pattern: "orderId"
+          enhancement: "根据订单ID"
+          description: "订单ID参数增强业务语义"
+
+      # 基于注释的业务名称提取
+      comment_extraction:
+        - pattern: "@description\\s+(.+)"
+          extraction: "$1"
+          description: "从@description注释提取业务描述"
+        - pattern: "/\\*\\*(.*?)\\*/"
+          extraction: "$1"
+          description: "从文档注释提取业务描述"
+        - pattern: "//\\s*(.+)"
+          extraction: "$1"
+          description: "从行注释提取业务描述"
+
+    # 业务领域识别规则
+    business_domain_rules:
+      # 基于文件路径的业务领域识别
+      file_path_patterns:
+        - pattern: "user|member"
+          domain: "用户管理"
+          description: "用户相关文件归类为用户管理领域"
+        - pattern: "order"
+          domain: "订单处理"
+          description: "订单相关文件归类为订单处理领域"
+        - pattern: "product|item"
+          domain: "商品管理"
+          description: "商品相关文件归类为商品管理领域"
+        - pattern: "payment"
+          domain: "支付处理"
+          description: "支付相关文件归类为支付处理领域"
+        - pattern: "notification|message"
+          domain: "消息通知"
+          description: "消息相关文件归类为消息通知领域"
+
+    # 业务功能识别规则
+    business_function_rules:
+      # 基于函数名的业务功能识别
+      function_patterns:
+        - pattern: "validate|check"
+          function: "验证"
+          description: "验证相关函数"
+        - pattern: "calculate|compute"
+          function: "计算"
+          description: "计算相关函数"
+        - pattern: "send|notify"
+          function: "发送通知"
+          description: "通知相关函数"
+        - pattern: "export|import"
+          function: "数据导入导出"
+          description: "数据导入导出相关函数"
+
+  # 按接口类型配置识别规则
+  interface_types:
+    restful:
+      # 必需特征（必须全部匹配）
+      required:
+        - type: "pattern"
+          pattern: "@app\\.route|@api\\.route|@router\\.(get|post|put|delete|patch)"
+          description: "路由装饰器模式（Python Flask/FastAPI）"
+          confidence: 0.95
+        - type: "pattern"
+          pattern: "@RestController|@RequestMapping|@GetMapping|@PostMapping|@PutMapping|@DeleteMapping"
+          description: "RESTful 注解（Java Spring Boot）"
+          confidence: 0.95
+        - type: "pattern"
+          pattern: "router\\.(get|post|put|delete|patch)|app\\.(get|post|put|delete|patch)"
+          description: "路由方法（JavaScript/TypeScript Express）"
+          confidence: 0.90
+        - type: "pattern"
+          pattern: "methods\\s*=\\s*\\[.*(GET|POST|PUT|DELETE|PATCH).*\\]"
+          description: "HTTP 方法定义"
+          confidence: 0.90
+      
+      # 可选特征（至少匹配一个）
+      optional:
+        - type: "pattern"
+          pattern: "path\\s*=\\s*['\"](.*?)['\"]"
+          description: "路径参数"
+          confidence: 0.85
+        - type: "pattern"
+          pattern: "params|query_params|path_params|request_body"
+          description: "参数定义"
+          confidence: 0.80
+      
+      # 文字类约束规则（自然语言描述，AI Agent 自动转换）
+      constraints:
+        # 用户可以在这里添加自然语言描述的约束规则
+        # 示例：
+        # - description: "在每个目录下 zenic_xx_plugin.py 文件中，create_、delete_、update_ 开头的函数"
+      
+      # 区分特征（用于区分不同类型的接口）
+      distinguishing:
+        description: "包含 HTTP 相关装饰器/注解和路径定义，与其他类型接口的区别是明确的 HTTP 方法和路径"
+        patterns:
+          - "@app.route"
+          - "@api.route"
+          - "@RestController"
+          - "methods="
+          - "router.get"
+      
+      # 排除特征（如果匹配则不是此类型）
+      exclude:
+        - type: "pattern"
+          pattern: "@message|@queue|@topic|@RabbitListener|@KafkaListener"
+          description: "消息队列相关注解"
+        - type: "pattern"
+          pattern: "@cli|@command|@click\\.command"
+          description: "命令行相关注解"
+      
+      # 语言特定规则
+      language_specific:
+        python:
+          frameworks:
+            Flask:
+              patterns:
+                - "@app.route"
+                - "from flask import Flask"
+              confidence: 0.95
+            FastAPI:
+              patterns:
+                - "@router.(get|post|put|delete)"
+                - "from fastapi import APIRouter"
+              confidence: 0.95
+        java:
+          frameworks:
+            "Spring Boot":
+              patterns:
+                - "@RestController"
+                - "@RequestMapping|@GetMapping|@PostMapping"
+              confidence: 0.95
+    
+    message:
+      # 必需特征
+      required:
+        - type: "pattern"
+          pattern: "@RabbitListener|@KafkaListener|@EventListener|subscribe|on_message|handle_message"
+          description: "消息监听器模式"
+          confidence: 0.95
+        - type: "pattern"
+          pattern: "queue|topic|channel|message_queue"
+          description: "消息队列相关关键字"
+          confidence: 0.90
+      
+      # 文字类约束规则（自然语言描述）
+      constraints:
+        # 用户可以在这里添加自然语言描述的约束规则
+        # 示例：
+        # - description: "messaging 目录下，以 _handler.py 结尾的文件中，handle_ 或 on_ 开头的函数"
+      
+      # 区分特征
+      distinguishing:
+        description: "包含消息队列相关注解或方法，用于处理异步消息"
+        patterns:
+          - "@RabbitListener"
+          - "@KafkaListener"
+          - "subscribe"
+          - "on_message"
+      
+      # 语言特定规则
+      language_specific:
+        java:
+          frameworks:
+            "Spring AMQP":
+              patterns:
+                - "@RabbitListener"
+                - "queues ="
+              confidence: 0.95
+    
+    module:
+      # 必需特征
+      required:
+        - type: "pattern"
+          pattern: "public\\s+(interface|class|function|def)"
+          description: "公共接口定义"
+          confidence: 0.85
+        - type: "pattern"
+          pattern: "export\\s+(function|class|interface)"
+          description: "导出接口（JavaScript/TypeScript）"
+          confidence: 0.85
+      
+      # 文字类约束规则（自然语言描述）
+      constraints:
+        # 用户可以在这里添加自然语言描述的约束规则
+        # 示例：
+        # - description: "在每个目录下 zenic_xx_plugin.py 文件中，create_、delete_、update_ 开头的函数"
+      
+      # 区分特征
+      distinguishing:
+        description: "模块间调用的公共接口，通常定义在头文件或接口文件中"
+        patterns:
+          - "public interface"
+          - "export function"
+          - ".h|.hpp"  # 头文件
+      
+      # C/C++ 特定规则
+      language_specific:
+        c:
+          patterns:
+            - "头文件中的公共函数声明"
+            - "函数指针类型定义"
+            - "服务接口结构体"
+          confidence: 0.90
+        cpp:
+          patterns:
+            - "头文件中的公共函数声明"
+            - "类公共方法"
+            - "服务接口类"
+          confidence: 0.90
+    
+    cli:
+      # 必需特征
+      required:
+        - type: "pattern"
+          pattern: "@click\\.command|@Command|argparse|commander|yargs"
+          description: "CLI 框架特征"
+          confidence: 0.95
+        - type: "pattern"
+          pattern: "main\\(.*argv|args\\)|process\\.argv|sys\\.argv"
+          description: "命令行参数处理"
+          confidence: 0.90
+      
+      # 文字类约束规则（自然语言描述）
+      constraints:
+        # 用户可以在这里添加自然语言描述的约束规则
+      
+      # 区分特征
+      distinguishing:
+        description: "命令行接口，处理命令行参数和命令"
+        patterns:
+          - "@click.command"
+          - "argparse"
+          - "CommandLineRunner"
+    
+    rpc:
+      # 必需特征
+      required:
+        - type: "pattern"
+          pattern: "service\\s+\\w+|@RpcService|grpc|thrift|dubbo"
+          description: "RPC 服务定义"
+          confidence: 0.95
+      
+      # 文字类约束规则（自然语言描述）
+      constraints:
+        # 用户可以在这里添加自然语言描述的约束规则
+      
+      # 区分特征
+      distinguishing:
+        description: "远程过程调用接口，使用 RPC 框架定义"
+        patterns:
+          - "service"
+          - "rpc"
+          - "gRPC"
+    
+    function:
+      # 必需特征（默认类型，无特殊特征）
+      required:
+        - type: "pattern"
+          pattern: "def\\s+\\w+|function\\s+\\w+|public\\s+\\w+"
+          description: "函数定义"
+          confidence: 0.70
+      
+      # 文字类约束规则（自然语言描述）
+      constraints:
+        # 用户可以在这里添加自然语言描述的约束规则
+      
+      # 区分特征
+      distinguishing:
+        description: "普通函数接口，无特殊装饰器、注解或框架特征"
+        patterns:
+          - "普通函数定义"
+          - "无特殊装饰器"
+
+# ============================================
+# 第二部分：Few-shot 格式定义（格式规范）
+# ============================================
+few_shot_format:
+  # 格式版本
+  format_version: "1.0"
+
+  # 全局格式配置
+  global:
+    # 每个接口类型的示例数量范围
+    example_count_range: [2, 3]
+
+    # 示例生成策略
+    generation_strategy: "rule_based"  # rule_based（基于规则）、ai_generated（AI 生成）、hybrid（混合）
+
+  # Few-shot 示例的 JSON 结构定义
+  structure:
+    # 根对象结构
+    root:
+      few_shot_examples:
+        type: "object"
+        description: "Few-shot 示例集合，按接口类型组织"
+        properties:
+          # 动态属性：接口类型名称（restful, message, module, cli, rpc, function, other）
+          "[interface_type]":
+            type: "array"
+            description: "该接口类型的示例列表"
+            items:
+              "$ref": "#/structure/example_item"
+
+      generation_timestamp:
+        type: "string"
+        format: "date-time"
+        description: "生成时间戳（ISO 8601 格式）"
+
+    # 示例项结构
+    example_item:
+      type: "object"
+      required: ["language", "code_snippet", "interface_type"]
+      properties:
+        language:
+          type: "string"
+          description: "编程语言（python, java, javascript, typescript, go, c, cpp 等）"
+          examples: ["python", "java", "javascript"]
+
+        code_snippet:
+          type: "string"
+          description: "接口代码片段（完整可运行，包含必要的上下文）"
+          min_length: 50
+          max_length: 500
+
+        interface_type:
+          type: "string"
+          description: "接口类型标识（restful, message, module, cli, rpc, function, other）"
+          enum: ["restful", "message", "module", "cli", "rpc", "function", "other"]
+
+        key_features:
+          type: "object"
+          description: "关键特征（装饰器、注解、命名模式等）"
+          properties:
+            decorators:
+              type: "array"
+              items:
+                type: "string"
+              description: "装饰器列表（Python）"
+            annotations:
+              type: "array"
+              items:
+                type: "string"
+              description: "注解列表（Java）"
+            http_method:
+              type: "string"
+              description: "HTTP 方法（RESTful API）"
+            path:
+              type: "string"
+              description: "路径（RESTful API、CLI）"
+            queue_name:
+              type: "string"
+              description: "队列名称（消息类接口）"
+            naming_pattern:
+              type: "string"
+              description: "命名模式（如 get_*, handle_*）"
+
+        identification_rules:
+          type: "object"
+          description: "识别规则说明"
+          properties:
+            required:
+              type: "array"
+              items:
+                type: "string"
+              description: "必需特征列表"
+            optional:
+              type: "array"
+              items:
+                type: "string"
+              description: "可选特征列表"
+            distinguishing:
+              type: "string"
+              description: "区分特征说明（与其他类型接口的区别）"
+
+        language_specific:
+          type: "object"
+          description: "语言特定特征"
+          properties:
+            framework:
+              type: "string"
+              description: "使用的框架（Flask, Spring Boot 等）"
+            syntax:
+              type: "string"
+              description: "语法说明"
+            notes:
+              type: "string"
+              description: "语言特定注意事项"
+
+        confidence:
+          type: "number"
+          format: "float"
+          minimum: 0.0
+          maximum: 1.0
+          description: "置信度（0.0-1.0）"
+          default: 0.85
+
+        file:
+          type: "string"
+          description: "来源文件路径（可选）"
+
+        line:
+          type: "integer"
+          description: "来源文件行号（可选）"
+
+        description:
+          type: "string"
+          description: "接口描述（可选）"
+
+        business_semantics:
+          type: "object"
+          description: "业务语义信息"
+          properties:
+            business_name:
+              type: "string"
+              description: "具有业务语义的接口名称（如：根据用户ID获取用户信息）"
+            business_domain:
+              type: "string"
+              description: "业务领域（如：用户管理、订单处理）"
+            business_function:
+              type: "string"
+              description: "业务功能描述（如：查询用户信息、创建订单）"
+
+  # 格式验证规则
+  validation:
+    # 必需字段检查
+    required_fields: ["language", "code_snippet", "interface_type"]
+
+    # 字段格式验证
+    field_validation:
+      code_snippet:
+        min_length: 50
+        max_length: 500
+        must_contain: ["def ", "function ", "class ", "@"]  # 至少包含一个
+      confidence:
+        range: [0.0, 1.0]
+        default: 0.85
+
+    # 示例质量要求
+    quality_requirements:
+      - "代码片段必须完整，包含必要的上下文"
+      - "关键特征必须明确标注"
+      - "识别规则必须清晰说明"
+      - "置信度必须合理（基于实际代码匹配度）"
+      - "必须提供业务语义信息，包括具有业务含义的接口名称"
+

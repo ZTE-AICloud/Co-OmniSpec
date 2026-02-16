@@ -1,0 +1,48 @@
+---
+description: 反构命令(omni-reversing)阶段文件的开发规范
+globs: .cursor/skills/omni-reversing/**/*.md
+alwaysApply: false
+---
+
+# 反构命令开发规则
+
+## 阶段文件命名
+
+- 概览阶段: `phase-{N}-{artifact}-overview.md`
+- 概览单元: `phase-{N}-{artifact}-overview-unit.md`
+- 规范阶段: `phase-{N}b-{artifact}-specs.md`
+- 规范单元: `phase-{N}b-{artifact}-specs-unit.md`
+- artifact 使用**单数**形式: `interface`, `entity`, `function`
+
+## 两阶段拆分模式
+
+每类制品拆分为"概览 → 规范"两个阶段:
+
+- **概览阶段(找全)**: 批量扫描,输出中间概览文件(概要表格 + 详情段)
+- **规范阶段(写透)**: 逐条深入代码分析,输出独立 spec 文件
+
+## 中间产物格式
+
+- 使用 **Markdown** 格式,不使用 XML
+- 概览文件结构: `统计` → `列表表格` → `详情段`(每条一个三级标题)
+- 存放路径: `omni-doc/specs-temp/intermediate/`
+
+## 模板引用
+
+- 规范单元的输出格式**引用** `specify/metamodel/` 下的模板文件
+- 不在单元文件中内嵌模板副本,保持单一信源
+
+## 批量编排标准结构
+
+批量编排文件须包含:
+1. 读取子提示词 + 概览文件 + 进度文件
+2. 按 ID 升序遍历,跳过已完成项
+3. Token 超限处理(100k 阈值)
+4. 进度文件使用 `[ ]`/`[x]` 标记
+
+## 变更联动
+
+修改中间文件名称或格式时,必须同步更新:
+- `SKILL.md` 阶段总览表和子提示词列表
+- 所有下游阶段的输入引用
+- `phase-done.md` 中的对应任务
