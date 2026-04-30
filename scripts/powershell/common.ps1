@@ -392,13 +392,13 @@ function Find-TemplateFile {
     }
 
     if (-not [string]::IsNullOrEmpty($OmniSpecRoot)) {
-        $systemDefaultDirTemplate = Join-Path $OmniSpecRoot ("specify/templates/default/$TemplateFilename")
+        $systemDefaultDirTemplate = Join-Path $OmniSpecRoot ("infra/templates/default/$TemplateFilename")
         $searchedPaths += $systemDefaultDirTemplate
         if (Test-Path -Path $systemDefaultDirTemplate -PathType Leaf) {
             return $systemDefaultDirTemplate
         }
 
-        $systemDefaultTemplate = Join-Path $OmniSpecRoot ("specify/templates/$TemplateFilename")
+        $systemDefaultTemplate = Join-Path $OmniSpecRoot ("infra/templates/$TemplateFilename")
         $searchedPaths += $systemDefaultTemplate
         if (Test-Path -Path $systemDefaultTemplate -PathType Leaf) {
             return $systemDefaultTemplate

@@ -90,10 +90,10 @@ $ARGUMENTS
 3. **获取环境信息**：
    - 判断当前操作系统（Windows/Linux）
    - **跨平台脚本调用**：
-     - Linux: `bash .specify/scripts/bash/check-prerequisites.sh --paths-only --json`
-     - Windows: `pwsh .specify/scripts/powershell/check-prerequisites.ps1 --paths-only --json`
+     - Linux: `bash .infra/scripts/bash/check-prerequisites.sh --paths-only --json`
+     - Windows: `pwsh .infra/scripts/powershell/check-prerequisites.ps1 --paths-only --json`
    - 从输出中提取 `REPO_ROOT`（JSON格式）
-   - **🔴 路径说明**：脚本路径为 `.specify/scripts/bash/check-prerequisites.sh`（Linux）或 `.specify/scripts/powershell/check-prerequisites.ps1`（Windows）
+   - **🔴 路径说明**：脚本路径为 `.infra/scripts/bash/check-prerequisites.sh`（Linux）或 `.infra/scripts/powershell/check-prerequisites.ps1`（Windows）
    - 注意：使用 `--paths-only` 模式可以跳过分支检查，允许在任何分支（包括 main/master）上执行 reverse 命令
    - 验证参数有效性
 

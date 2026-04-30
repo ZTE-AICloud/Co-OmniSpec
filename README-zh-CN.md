@@ -174,7 +174,7 @@ claude plugin install omni@CoMind-plugins
 | 环境 | 支持 | 说明 |
 |------|------|------|
 | [Claude Code](https://code.claude.com/) | ✅ | 主要支持；通过插件市场与 `/market`（或 `/plugin`）命令管理。 |
-| 其他 AI Agent | 可适配 | 命令/技能模式与 `.specify/` 目录结构可按需迁移适配。 |
+| 其他 AI Agent | 可适配 | 命令/技能模式与 `.infra/` 目录结构可按需迁移适配。 |
 
 ---
 
@@ -208,7 +208,7 @@ Co-OmniSpec的规范驱动开发强调：
 ├── .claude/
 │   ├── commands/          # OmniSpec 斜杠命令
 │   └── skills/            # specify、design、tasks、implement 等技能
-├── .specify/
+├── .infra/
 │   ├── memory/
 │   │   └── constitution.md
 │   ├── metamodel/         # 需求、上下文、场景、架构等元模型
@@ -237,7 +237,7 @@ Co-OmniSpec的规范驱动开发强调：
 
 在 Claude Code 中安装 Co-OmniSpec 后：
 
-1. **章程** — 运行 `/constitution` 并描述项目原则，生成或更新 `.specify/memory/constitution.md`。
+1. **章程** — 运行 `/constitution` 并描述项目原则，生成或更新 `.infra/memory/constitution.md`。
 2. **规格** — 运行 `/specify` 并输入功能描述（做什么、为什么），生成分支、`changes/<分支>/spec.md`、`context.md` 与需求检查清单。
 3. **澄清**（建议在设计前）— 运行 `/clarify` 消除歧义，答案会写回规范。
 4. **设计** — 运行 `/design` 并说明技术栈，生成 `design.md`、`research.md`、`data-model.md`、`quickstart.md` 及可选的 `contracts/`。

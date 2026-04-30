@@ -326,7 +326,7 @@ reverse - 从代码库中反构各种类型的要素，生成标准化的要素�
   .\reverse.ps1 --target interfaces --incremental --git-diff HEAD~1 --merge
 
 更多信息：
-  请参考设计文档：specify/design/omni_reverse_interface_inventory_design.md
+  请参考设计文档：infra/design/omni_reverse_interface_inventory_design.md
 
 "@
 }
@@ -1005,7 +1005,7 @@ function Main {
     Write-LogInfo "扫描文件: $($script:RESOLVED_FILES.Count) 个文件"
 
     Write-LogWarn "警告：这是第一阶段的基础框架，具体功能将在后续任务中实现"
-    Write-LogInfo "功能开发进度请参考任务清单：specify/design/omni_reverse_tasks.md"
+    Write-LogInfo "功能开发进度请参考任务清单：infra/design/omni_reverse_tasks.md"
 
     # TODO: 后续阶段实现
     # - 调用扫描和分析函数（T017-T019）

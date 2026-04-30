@@ -7,7 +7,7 @@
         "implement": true
     },
     "chat.tools.terminal.autoApprove": {
-        ".specify/scripts/bash/": true,
-        ".specify/scripts/powershell/": true
+        ".infra/scripts/bash/": true,
+        ".infra/scripts/powershell/": true
     }
 }

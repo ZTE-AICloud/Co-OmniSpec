@@ -9,7 +9,7 @@ description: SDD流程代码变更采集Skill。在SDD流程执行完毕后，�
 ## 功能说明
 
 1. 根据 `FEATURE_DIR` 解析当前任务分支名称, 识别 `changes/` 目录下面的当前分支
-2. 扫描当前项目目录下的所有代码变更，但不包含.claude/、specify/、changes/等目录
+2. 扫描当前项目目录下的所有代码变更，但不包含.claude/、.infra/、changes/等目录
 3. 从 `tasks.md` 中提取 feature_infos（"**目的**:" 行）
 4. 生成符合评测格式的 JSON 文件，保存到 `changes/<branch>/evalset/` 目录
 

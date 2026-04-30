@@ -78,8 +78,8 @@
 4.2. **建立接口 → 实体关系**
    - 🔴 **强制要求**：必须建立接口到实体的关系
    - 调用实体关系构建脚本：
-     - Linux/macOS: `python3 {REPO_ROOT}/specify/scripts/python/reverse_entities/entity_relationship_builder.py --repo-root {REPO_ROOT} --entity-lineage {entity_lineage_file} --interfaces-dir {interfaces_dir} --output {output_dir}/interface-entity.json --relation-type interface-to-entity`
-     - Windows: `python {REPO_ROOT}\specify\scripts\python\reverse_entities\entity_relationship_builder.py --repo-root {REPO_ROOT} --entity-lineage {entity_lineage_file} --interfaces-dir {interfaces_dir} --output {output_dir}\interface-entity.json --relation-type interface-to-entity`
+     - Linux/macOS: `python3 {REPO_ROOT}/.infra/scripts/python/reverse_entities/entity_relationship_builder.py --repo-root {REPO_ROOT} --entity-lineage {entity_lineage_file} --interfaces-dir {interfaces_dir} --output {output_dir}/interface-entity.json --relation-type interface-to-entity`
+     - Windows: `python {REPO_ROOT}\.infra\scripts\python\reverse_entities\entity_relationship_builder.py --repo-root {REPO_ROOT} --entity-lineage {entity_lineage_file} --interfaces-dir {interfaces_dir} --output {output_dir}\interface-entity.json --relation-type interface-to-entity`
    - 脚本参数说明：
      - `--repo-root`：仓库根目录
      - `--entity-lineage`：实体溯源映射文件路径
@@ -104,8 +104,8 @@
 4.3. **建立实体 → 接口关系**
    - 🔴 **强制要求**：必须建立实体到接口的反向关系
    - 调用实体关系构建脚本：
-     - Linux/macOS: `python3 {REPO_ROOT}/specify/scripts/python/reverse_entities/entity_relationship_builder.py --repo-root {REPO_ROOT} --entity-lineage {entity_lineage_file} --output {output_dir}/entity-interface.json --relation-type entity-to-interface`
-     - Windows: `python {REPO_ROOT}\specify\scripts\python\reverse_entities\entity_relationship_builder.py --repo-root {REPO_ROOT} --entity-lineage {entity_lineage_file} --output {output_dir}\entity-interface.json --relation-type entity-to-interface`
+     - Linux/macOS: `python3 {REPO_ROOT}/.infra/scripts/python/reverse_entities/entity_relationship_builder.py --repo-root {REPO_ROOT} --entity-lineage {entity_lineage_file} --output {output_dir}/entity-interface.json --relation-type entity-to-interface`
+     - Windows: `python {REPO_ROOT}\.infra\scripts\python\reverse_entities\entity_relationship_builder.py --repo-root {REPO_ROOT} --entity-lineage {entity_lineage_file} --output {output_dir}\entity-interface.json --relation-type entity-to-interface`
    - 脚本参数说明：
      - `--repo-root`：仓库根目录
      - `--entity-lineage`：实体溯源映射文件路径
@@ -135,8 +135,8 @@
      - 验证功能-接口关系文件存在：`{REPO_ROOT}/omni-doc/specs/entities/relations/function-interface.json`
      - 验证接口-实体关系文件存在：`{REPO_ROOT}/omni-doc/specs/entities/relations/interface-entity.json`（步骤4.2的输出）
      - 调用实体关系构建脚本：
-       - Linux/macOS: `python3 {REPO_ROOT}/specify/scripts/python/reverse_entities/entity_relationship_builder.py --repo-root {REPO_ROOT} --function-interface-relations {function_interface_file} --interface-entity-relations {interface_entity_file} --output {output_dir}/function-entity.json --relation-type function-to-entity`
-       - Windows: `python {REPO_ROOT}\specify\scripts\python\reverse_entities\entity_relationship_builder.py --repo-root {REPO_ROOT} --function-interface-relations {function_interface_file} --interface-entity-relations {interface_entity_file} --output {output_dir}\function-entity.json --relation-type function-to-entity`
+       - Linux/macOS: `python3 {REPO_ROOT}/.infra/scripts/python/reverse_entities/entity_relationship_builder.py --repo-root {REPO_ROOT} --function-interface-relations {function_interface_file} --interface-entity-relations {interface_entity_file} --output {output_dir}/function-entity.json --relation-type function-to-entity`
+       - Windows: `python {REPO_ROOT}\.infra\scripts\python\reverse_entities\entity_relationship_builder.py --repo-root {REPO_ROOT} --function-interface-relations {function_interface_file} --interface-entity-relations {interface_entity_file} --output {output_dir}\function-entity.json --relation-type function-to-entity`
      - 脚本参数说明：
        - `--repo-root`：仓库根目录
        - `--function-interface-relations`：功能-接口关系文件路径

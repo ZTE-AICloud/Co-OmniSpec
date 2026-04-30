@@ -79,7 +79,7 @@ Important routing conventions:
 
 **Output:**
 
-- `.specify/memory/constitution.md` created or updated.
+- `.infra/memory/constitution.md` created or updated.
 - Dependent templates kept in sync.
 
 **When to use:** Once at project start, or when you change project-wide rules.
@@ -129,7 +129,7 @@ Important routing conventions:
 - `quickstart.md` — quick start for the feature.
 - `contracts/` — API/contract specs as needed.
 
-**When to use:** After the spec (and optionally clarify) is done. The design should align with `.specify/memory/constitution.md`.
+**When to use:** After the spec (and optionally clarify) is done. The design should align with `.infra/memory/constitution.md`.
 
 ---
 
@@ -229,12 +229,12 @@ All paths are relative to the repository root. The branch name usually matches t
 
 | Item | Description |
 |------|-------------|
-| **DOC_DIR** | Root for existing specs/docs used by impact analysis and reverse. Default often `omni-doc`. Can be set via `.specify/config` or environment. |
+| **DOC_DIR** | Root for existing specs/docs used by impact analysis and reverse. Default often `omni-doc`. Can be set via `.infra/config` or environment. |
 | **SPECIFY_FEATURE** | Override feature detection when not using Git branches. Set to the feature directory name (e.g. `001-photo-albums`) so that `/design` and later commands know which feature to use. |
-| **`.specify/config`** | Optional config file for paths and defaults. |
-| **`.specify/memory/constitution.md`** | Project principles; editable by hand or via `/constitution`. |
+| **`.infra/config`** | Optional config file for paths and defaults. |
+| **`.infra/memory/constitution.md`** | Project principles; editable by hand or via `/constitution`. |
 
-Scripts (e.g. prerequisite checks, branch creation) live under `.specify/scripts/bash/` and `.specify/scripts/powershell/`. They are invoked by the skills; you can run them manually for debugging.
+Scripts (e.g. prerequisite checks, branch creation) live under `.infra/scripts/bash/` and `.infra/scripts/powershell/`. They are invoked by the skills; you can run them manually for debugging.
 
 ---
 

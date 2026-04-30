@@ -79,7 +79,7 @@ Routing 参数示例：
 
 **产出：**
 
-- 创建或更新 `.specify/memory/constitution.md`。
+- 创建或更新 `.infra/memory/constitution.md`。
 - 依赖模板保持同步。
 
 **使用时机：** 项目开始时执行一次，或当项目级规则变更时。
@@ -129,7 +129,7 @@ Routing 参数示例：
 - `quickstart.md` — 功能快速上手。
 - `contracts/` — 按需的 API/契约说明。
 
-**使用时机：** 规范（及可选的澄清）完成后。设计需符合 `.specify/memory/constitution.md`。
+**使用时机：** 规范（及可选的澄清）完成后。设计需符合 `.infra/memory/constitution.md`。
 
 ---
 
@@ -229,12 +229,12 @@ changes/001-feature-name/
 
 | 项 | 说明 |
 |----|------|
-| **DOC_DIR** | 既有规格/文档根目录，用于波及分析与逆向。默认常为 `omni-doc`。可通过 `.specify/config` 或环境变量设置。 |
+| **DOC_DIR** | 既有规格/文档根目录，用于波及分析与逆向。默认常为 `omni-doc`。可通过 `.infra/config` 或环境变量设置。 |
 | **SPECIFY_FEATURE** | 在不使用 Git 分支时覆盖功能检测。设为功能目录名（如 `001-photo-albums`），以便 `/design` 及后续命令确定当前功能。 |
-| **`.specify/config`** | 可选配置文件，用于路径与默认值。 |
-| **`.specify/memory/constitution.md`** | 项目章程；可手动编辑或通过 `/constitution` 更新。 |
+| **`.infra/config`** | 可选配置文件，用于路径与默认值。 |
+| **`.infra/memory/constitution.md`** | 项目章程；可手动编辑或通过 `/constitution` 更新。 |
 
-脚本位于 `.specify/scripts/bash/` 与 `.specify/scripts/powershell/`，由技能调用；也可手动执行以便排查问题。
+脚本位于 `.infra/scripts/bash/` 与 `.infra/scripts/powershell/`，由技能调用；也可手动执行以便排查问题。
 
 ---
 

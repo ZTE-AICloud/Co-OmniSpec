@@ -49,11 +49,10 @@ def run_reverse_identify(repo_root: str, input_base_dir: str, output_base_dir: s
     if not input_base.exists():
         raise FileNotFoundError(f"input_base_dir 不存在: {input_base}")
 
-    # 1. 解析 reverse_syntax_parser/main.py 脚本路径（优先 specify/scripts/python/）
-    # 先检查specify目录，再检查旧位置的符号链接
+    # 1. 解析 reverse_syntax_parser/main.py：优先 `.infra/scripts/python/`，其次 OmniSpec 源码树 `scripts/python/`
     scripts_root_candidates = [
-        repo_root_path / "specify" / "scripts" / "python",
         repo_root_path / ".infra" / "scripts" / "python",
+        repo_root_path / "scripts" / "python",
     ]
     main_py: Path | None = None
     for root in scripts_root_candidates:
@@ -64,7 +63,7 @@ def run_reverse_identify(repo_root: str, input_base_dir: str, output_base_dir: s
 
     if not main_py:
         raise FileNotFoundError(
-            f"未找到 reverse_syntax_parser/main.py，请确认已安装到 .scripts/python/ 或存在于 scripts/python/ 下"
+            f"未找到 reverse_syntax_parser/main.py，请确认已安装到 `.infra/scripts/python/` 或源码树存在 `scripts/python/`"
         )
 
     # 2. 调用 reverse_syntax_parser 的 identify 步骤

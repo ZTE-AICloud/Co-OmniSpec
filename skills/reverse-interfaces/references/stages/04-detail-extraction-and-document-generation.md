@@ -359,7 +359,7 @@
 - **必须使用标准工具**：更新接口状态时必须使用提供的标准脚本工具：
   - Linux/macOS: `{REPO_ROOT}/scripts/bash/reverse/interfaces/utils/update_interface_status.sh`
   - Windows: `{REPO_ROOT}\scripts\powershell\reverse\interfaces\utils\Update-InterfaceStatus.ps1`
-  - Python脚本: `specify/scripts/python/reverse_interfaces/update_interface_status.py`
+  - Python脚本: `.infra/scripts/python/reverse_interfaces/update_interface_status.py`（OmniSpec 源码树内同文件位于 `scripts/python/reverse_interfaces/update_interface_status.py`）
 
 - **禁止手动更新**：严禁手动编辑接口清单文件来更新状态，必须使用标准工具
 

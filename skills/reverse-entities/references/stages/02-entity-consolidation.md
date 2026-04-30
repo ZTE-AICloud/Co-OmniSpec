@@ -86,8 +86,8 @@
 4.3. **步骤0：规则去重（基于entity_id）**
    - 🔴 **强制要求**：必须执行规则去重，快速去除完全相同的实体
    - 调用实体融合脚本执行规则去重：
-     - Linux/macOS: `python3 {REPO_ROOT}/specify/scripts/python/reverse_entities/entity_consolidator.py --repo-root {REPO_ROOT} --input-dir {entity_extraction_dir} --output-dir {entity_consolidation_dir} --step rule-dedup`
-     - Windows: `python {REPO_ROOT}\specify\scripts\python\reverse_entities\entity_consolidator.py --repo-root {REPO_ROOT} --input-dir {entity_extraction_dir} --output-dir {entity_consolidation_dir} --step rule-dedup`
+     - Linux/macOS: `python3 {REPO_ROOT}/.infra/scripts/python/reverse_entities/entity_consolidator.py --repo-root {REPO_ROOT} --input-dir {entity_extraction_dir} --output-dir {entity_consolidation_dir} --step rule-dedup`
+     - Windows: `python {REPO_ROOT}\.infra\scripts\python\reverse_entities\entity_consolidator.py --repo-root {REPO_ROOT} --input-dir {entity_extraction_dir} --output-dir {entity_consolidation_dir} --step rule-dedup`
    - 脚本参数说明：
      - `--repo-root`：仓库根目录
      - `--input-dir`：实体抽取输出目录
@@ -112,8 +112,8 @@
    #### 子步骤1：基本信息融合
    - 🔴 **强制要求**：必须调用AI模型进行基本信息融合判断
    - 调用实体融合脚本执行基本信息融合：
-     - Linux/macOS: `python3 {REPO_ROOT}/specify/scripts/python/reverse_entities/entity_consolidator.py --repo-root {REPO_ROOT} --input-dir {entity_extraction_dir} --output-dir {entity_consolidation_dir} --step basic-merge --round {round_num}`
-     - Windows: `python {REPO_ROOT}\specify\scripts\python\reverse_entities\entity_consolidator.py --repo-root {REPO_ROOT} --input-dir {entity_extraction_dir} --output-dir {entity_consolidation_dir} --step basic-merge --round {round_num}`
+     - Linux/macOS: `python3 {REPO_ROOT}/.infra/scripts/python/reverse_entities/entity_consolidator.py --repo-root {REPO_ROOT} --input-dir {entity_extraction_dir} --output-dir {entity_consolidation_dir} --step basic-merge --round {round_num}`
+     - Windows: `python {REPO_ROOT}\.infra\scripts\python\reverse_entities\entity_consolidator.py --repo-root {REPO_ROOT} --input-dir {entity_extraction_dir} --output-dir {entity_consolidation_dir} --step basic-merge --round {round_num}`
    - 🔴 **批次处理**：
      - 将实体分批（每批40个），并发处理（最大并发20）
      - 参考核心规则文档中的批次处理规则
@@ -132,8 +132,8 @@
    #### 子步骤2：类图整合
    - 🔴 **强制要求**：必须为合并后的实体组整合类图
    - 调用实体融合脚本执行类图整合：
-     - Linux/macOS: `python3 {REPO_ROOT}/specify/scripts/python/reverse_entities/entity_consolidator.py --repo-root {REPO_ROOT} --input-dir {entity_extraction_dir} --output-dir {entity_consolidation_dir} --step class-diagram-merge --round {round_num}`
-     - Windows: `python {REPO_ROOT}\specify\scripts\python\reverse_entities\entity_consolidator.py --repo-root {REPO_ROOT} --input-dir {entity_extraction_dir} --output-dir {entity_consolidation_dir} --step class-diagram-merge --round {round_num}`
+     - Linux/macOS: `python3 {REPO_ROOT}/.infra/scripts/python/reverse_entities/entity_consolidator.py --repo-root {REPO_ROOT} --input-dir {entity_extraction_dir} --output-dir {entity_consolidation_dir} --step class-diagram-merge --round {round_num}`
+     - Windows: `python {REPO_ROOT}\.infra\scripts\python\reverse_entities\entity_consolidator.py --repo-root {REPO_ROOT} --input-dir {entity_extraction_dir} --output-dir {entity_consolidation_dir} --step class-diagram-merge --round {round_num}`
    - 🔴 **处理逻辑**：
      - 收集合并组中所有源实体的类图
      - 如果只有一个类图，直接使用
@@ -160,8 +160,8 @@
 4.5. **步骤4：实体价值评估**
    - 🔴 **强制要求**：必须执行实体价值评估，过滤低价值实体
    - 调用实体融合脚本执行价值评估：
-     - Linux/macOS: `python3 {REPO_ROOT}/specify/scripts/python/reverse_entities/entity_consolidator.py --repo-root {REPO_ROOT} --input-dir {entity_extraction_dir} --output-dir {entity_consolidation_dir} --step value-evaluation`
-     - Windows: `python {REPO_ROOT}\specify\scripts\python\reverse_entities\entity_consolidator.py --repo-root {REPO_ROOT} --input-dir {entity_extraction_dir} --output-dir {entity_consolidation_dir} --step value-evaluation`
+     - Linux/macOS: `python3 {REPO_ROOT}/.infra/scripts/python/reverse_entities/entity_consolidator.py --repo-root {REPO_ROOT} --input-dir {entity_extraction_dir} --output-dir {entity_consolidation_dir} --step value-evaluation`
+     - Windows: `python {REPO_ROOT}\.infra\scripts\python\reverse_entities\entity_consolidator.py --repo-root {REPO_ROOT} --input-dir {entity_extraction_dir} --output-dir {entity_consolidation_dir} --step value-evaluation`
    - 🔴 **批次处理**：
      - 分批评估（每批30个），并发处理（最大并发20）
      - 参考核心规则文档中的批次处理规则
@@ -181,8 +181,8 @@
 4.6. **生成融合结果**
    - 🔴 **强制要求**：必须生成融合后的实体列表和更新的溯源映射
    - 调用实体融合脚本生成最终结果：
-     - Linux/macOS: `python3 {REPO_ROOT}/specify/scripts/python/reverse_entities/entity_consolidator.py --repo-root {REPO_ROOT} --input-dir {entity_extraction_dir} --output-dir {entity_consolidation_dir} --step generate-result`
-     - Windows: `python {REPO_ROOT}\specify\scripts\python\reverse_entities\entity_consolidator.py --repo-root {REPO_ROOT} --input-dir {entity_extraction_dir} --output-dir {entity_consolidation_dir} --step generate-result`
+     - Linux/macOS: `python3 {REPO_ROOT}/.infra/scripts/python/reverse_entities/entity_consolidator.py --repo-root {REPO_ROOT} --input-dir {entity_extraction_dir} --output-dir {entity_consolidation_dir} --step generate-result`
+     - Windows: `python {REPO_ROOT}\.infra\scripts\python\reverse_entities\entity_consolidator.py --repo-root {REPO_ROOT} --input-dir {entity_extraction_dir} --output-dir {entity_consolidation_dir} --step generate-result`
    - 🔴 **生成文件**：
      - **融合后的实体列表**：
        - 文件路径：`{REPO_ROOT}/.cache/reverse/entities/entity-consolidation/consolidated-entities.json`

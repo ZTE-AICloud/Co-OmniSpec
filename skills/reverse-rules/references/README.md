@@ -55,7 +55,7 @@
 
 模板占位符的详细列表，见：  
 `本 Skill（reverse-rules）的 references/data.md` 与  
-`specify/metamodel/10.rules-templates/README.md`。
+`infra/metamodel/10.rules-templates/README.md`。
 
 ### 5. 默认行为与注意事项（rules）
 

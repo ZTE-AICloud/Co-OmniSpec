@@ -125,7 +125,7 @@ on-demand 实体消费规则（仅 evidence_first 模式）：
 **输出位置**:
 
 - 生成文件: `FEATURE_DIR/data-model.md`
-- 参考模板: `specify/templates/data-model-template.md`
+- 参考模板: `.infra/templates/data-model-template.md`
 
 ## DoD（完成校验）
 

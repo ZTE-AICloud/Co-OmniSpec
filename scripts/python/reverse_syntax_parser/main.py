@@ -15,7 +15,7 @@ import argparse
 import os
 from pathlib import Path
 
-# 确保可导入本包（reverse_syntax_parser 位于 specify/scripts/python/）
+# 确保可导入本包（reverse_syntax_parser 位于 .infra/scripts/python/ 或源码树 scripts/python/）
 _SCRIPT_DIR = Path(__file__).resolve().parent
 _PYTHON_DIR = _SCRIPT_DIR.parent
 if str(_PYTHON_DIR) not in sys.path:

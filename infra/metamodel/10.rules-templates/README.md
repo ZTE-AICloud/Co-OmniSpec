@@ -4,8 +4,8 @@
 
 ## 路径
 
-- **OmniSpec 仓库内**：`specify/metamodel/10.rules-templates/`
-- **用户项目中**（.specify 已链接）：`{REPO_ROOT}/.specify/metamodel/10.rules-templates/`
+- **OmniSpec 仓库内**：`infra/metamodel/10.rules-templates/`
+- **用户项目中**（`.infra` 已安装或链接）：`{REPO_ROOT}/.infra/metamodel/10.rules-templates/`
 
 ## 文件命名
 

@@ -96,7 +96,7 @@ claude plugin install omni@CoMind-plugins
    并说明这些原则应如何指导技术决策。
    ```
 
-4. Agent 会创建或更新 `.specify/memory/constitution.md`。之后可随时编辑该文件以细化原则。
+4. Agent 会创建或更新 `.infra/memory/constitution.md`。之后可随时编辑该文件以细化原则。
 
 ---
 

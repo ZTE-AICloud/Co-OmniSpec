@@ -14,4 +14,4 @@ target: deep_logic_architecture
 ## 模板约定
 
 - 默认模板路径（安装后）：`{REPO_ROOT}/.infra/templates/logic-architecture-template.md`
-- 源码路径（本仓库）：`{REPO_ROOT}/specify/templates/logic-architecture-template.md`
+- 源码路径（本仓库）：`{REPO_ROOT}/infra/templates/logic-architecture-template.md`（安装到目标项目后为 `{REPO_ROOT}/.infra/templates/logic-architecture-template.md`）

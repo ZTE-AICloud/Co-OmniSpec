@@ -50,7 +50,7 @@ $ARGUMENTS
    - **强制要求**：`create-branch` 必须被完整调用并等待返回，不允许跳过、截断执行或使用本地推断结果替代其输出。
    - **强制要求**：必须以 `create-branch` 返回的 `BRANCH_NAME`、`FEATURE_DIR`、`SPEC_FILE` 作为后续步骤的唯一基准。
    - **强制校验**：`FEATURE_DIR` 必须位于仓库根目录 `changes/` 下（即满足 `{REPO_ROOT}/changes/<feature>` 结构）。
-   - **失败处理**：若 `FEATURE_DIR` 不在 `changes/` 下（例如落到 `.specify/`、`.infra/`、`specs/` 或其他路径），不得继续后续步骤；必须重走 `create-branch` 重新生成合法路径，直到通过校验后再继续。
+   - **失败处理**：若 `FEATURE_DIR` 不在 `changes/` 下（例如落到 `.infra/`、`specs/` 或其他路径），不得继续后续步骤；必须重走 `create-branch` 重新生成合法路径，直到通过校验后再继续。
 
 1.1 **分支安全检查（创建/复用后立即执行）**：
    - 读取 `create-branch` 输出的 `BRANCH_NAME`、`FEATURE_DIR`；

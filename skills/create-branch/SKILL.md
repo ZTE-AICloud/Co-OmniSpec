@@ -137,8 +137,8 @@ user-invokable: false
 
 | 环境 | 命令 |
 |------|------|
-| Linux / macOS / Git Bash | `bash ./specify/scripts/bash/create-new-feature.sh --json --branch-name "<BRANCH_NAME>" --feature-dir "<DIR_NAME>"` |
-| Windows（PowerShell） | `pwsh ./specify/scripts/powershell/create-new-feature.ps1 -Json -BranchName "<BRANCH_NAME>" -FeatureDir "<DIR_NAME>"` |
+| Linux / macOS / Git Bash | `bash ./.infra/scripts/bash/create-new-feature.sh --json --branch-name "<BRANCH_NAME>" --feature-dir "<DIR_NAME>"` |
+| Windows（PowerShell） | `pwsh ./.infra/scripts/powershell/create-new-feature.ps1 -Json -BranchName "<BRANCH_NAME>" -FeatureDir "<DIR_NAME>"` |
 
 说明：
 

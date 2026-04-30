@@ -266,12 +266,12 @@ def main():
     if not template_file:
         script_dir = os.path.dirname(os.path.abspath(__file__))
         omnispec_root = os.path.abspath(os.path.join(script_dir, '../../../../..'))
-        system_default = os.path.join(omnispec_root, 'specify', 'templates', 'default', 'reverse-interface-inventory-template.md')
+        system_default = os.path.join(omnispec_root, 'infra', 'templates', 'default', 'reverse-interface-inventory-template.md')
         if os.path.exists(system_default):
             template_file = system_default
         else:
             # 向后兼容：系统根目录下的模板
-            system_template = os.path.join(omnispec_root, 'specify', 'templates', 'reverse-interface-inventory-template.md')
+            system_template = os.path.join(omnispec_root, 'infra', 'templates', 'reverse-interface-inventory-template.md')
             if os.path.exists(system_template):
                 template_file = system_template
     

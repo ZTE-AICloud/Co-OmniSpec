@@ -93,7 +93,7 @@ The constitution defines your project’s principles and constraints. All later 
    and performance. Include how these principles should guide technical decisions.
    ```
 
-4. The agent will create or update `.specify/memory/constitution.md`. You can edit this file later to refine principles.
+4. The agent will create or update `.infra/memory/constitution.md`. You can edit this file later to refine principles.
 
 ---
 

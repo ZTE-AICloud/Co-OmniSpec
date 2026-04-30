@@ -64,7 +64,7 @@ $ARGUMENTS
 
 - `check-prerequisites.sh --paths-only` 在 routing 阶段仅用于提供**临时路径上下文**（如 `REPO_ROOT`、候选 `FEATURE_DIR`），**不是最终分支决策依据**。
 - routing 阶段**不得创建分支**，也**不得创建 `changes/<branch>` 分支目录**。
-- routing 阶段**不得在任何路径下创建分支目录、特性目录或等价工作目录**，不限于 `changes/`，也包括 `.specify/`、`.infra/` 或其他自定义目录下的分支工作路径。
+- routing 阶段**不得在任何路径下创建分支目录、特性目录或等价工作目录**，不限于 `changes/`，也包括 `.infra/` 或其他自定义目录下的分支工作路径。
 - routing 阶段**不得假设**已生成最终 `BRANCH_NAME` / `FEATURE_DIR`；此时获取到的分支与目录信息仅可用于只读探测与状态判断。
 - 在 `create-branch` 执行前，严禁基于该临时 `FEATURE_DIR` 落盘关键产物（如 `spec.md`、`design.md`、`tasks.md`、状态文件）。
 - 若 `BRANCH` 命中 `master/main`：
@@ -171,7 +171,7 @@ $ARGUMENTS
 > **执行约定**: 所有 workflow agent 必须使用 `run_in_background: false`（前台运行），禁止后台执行。
 
 > **禁止行为**:
-> - **严格禁止**在本步骤之前创建任何分支目录、特性目录、工作目录或 `.omnispec-state.json` 文件（不限于 `changes/`，也包括 `.specify/`、`.infra/` 等路径示例）
+> - **严格禁止**在本步骤之前创建任何分支目录、特性目录、工作目录或 `.omnispec-state.json` 文件（不限于 `changes/`，也包括 `.infra/` 等路径示例）
 > - 目录和状态文件应由 `create-branch`（在 `specify` 内部调用）创建
 > - 若当前已在特性分支上下文中，`check-prerequisites.sh` 应返回对应特性分支；若异常返回 `master/main`，应视为分支探测异常并触发重试/修复，而不是继续使用主干分支
 > - **严格禁止**跳过 `create-branch`：无论是新建还是复用分支，均必须执行 `create-branch` 并以其输出为准

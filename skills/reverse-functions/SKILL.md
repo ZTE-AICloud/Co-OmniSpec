@@ -101,7 +101,7 @@ user-invokable: false
   - `{REPO_ROOT}/omni-doc/specs/functions/FUNC-XXX-功能名称.md`
 - **要点**：
   - 以 `function-list.json` 为输入，分批处理功能；
-  - 严格按照 `specify/metamodel/5.function-template.md` 的结构和字段生成文档（frontmatter、章节、PlantUML 部分等必须保持一致）；
+  - 严格按照 `.infra/metamodel/5.function-template.md` 的结构和字段生成文档（frontmatter、章节、PlantUML 部分等必须保持一致）；
   - 在默认模式下自动生成；如 Skill 需要，可在交互模式加入最终确认。
 
 ## 模式、缓存与 Todo 管理

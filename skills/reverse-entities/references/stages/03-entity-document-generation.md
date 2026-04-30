@@ -27,7 +27,7 @@
 - 定义缓存目录：`{REPO_ROOT}/.cache/reverse/entities/`
 - 定义实体融合输出目录：`{REPO_ROOT}/.cache/reverse/entities/entity-consolidation/`
 - 定义最终输出目录：`{REPO_ROOT}/omni-doc/specs/entities/`
-- 定义实体模板路径：`{REPO_ROOT}/specify/metamodel/6.entity-template.md`
+- 定义实体模板路径：`{REPO_ROOT}/.infra/metamodel/6.entity-template.md`
 
 ### 3. [ ] 检查缓存状态和依赖验证
 - AI Agent直接读取状态文件 `{REPO_ROOT}/.cache/reverse/entities/.cache-status.json`
@@ -73,7 +73,7 @@
 
 4.2. **加载实体模板**
    - 🔴 **强制要求**：必须加载实体文档模板
-   - 强制使用默认模板：`{REPO_ROOT}/specify/metamodel/6.entity-template.md`
+   - 强制使用默认模板：`{REPO_ROOT}/.infra/metamodel/6.entity-template.md`
    - 读取模板文件内容
    - 🔴 **验证模板存在**：如果模板文件不存在，给出明确的错误提示
    - 🔴 **验证模板格式**：验证模板包含以下必备结构（与模板文件完全一致）：YAML frontmatter（id、name、description）、## 实体、## 实体结构（PlantUML 代码块）、## 属性说明（### 属性名 + 类型/用途/取值范围/约束条件）、## 方法说明（### 方法名 + 函数签名/功能描述/输入参数/返回值/调用场景）、## 职责说明
@@ -83,8 +83,8 @@
 4.3. **生成实体文档（基于模板填充）**
    - 🔴 **强制要求**：必须为每个实体生成独立的MD文件
    - 调用实体文档生成脚本：
-     - Linux/macOS: `python3 {REPO_ROOT}/specify/scripts/python/reverse_entities/entity_list_generator.py --repo-root {REPO_ROOT} --input-file {consolidated_entities_file} --template-file {template_file} --output-dir {output_dir} --mode generate-documents`
-     - Windows: `python {REPO_ROOT}\specify\scripts\python\reverse_entities\entity_list_generator.py --repo-root {REPO_ROOT} --input-file {consolidated_entities_file} --template-file {template_file} --output-dir {output_dir} --mode generate-documents`
+     - Linux/macOS: `python3 {REPO_ROOT}/.infra/scripts/python/reverse_entities/entity_list_generator.py --repo-root {REPO_ROOT} --input-file {consolidated_entities_file} --template-file {template_file} --output-dir {output_dir} --mode generate-documents`
+     - Windows: `python {REPO_ROOT}\.infra\scripts\python\reverse_entities\entity_list_generator.py --repo-root {REPO_ROOT} --input-file {consolidated_entities_file} --template-file {template_file} --output-dir {output_dir} --mode generate-documents`
    - 脚本参数说明：
      - `--repo-root`：仓库根目录
      - `--input-file`：融合后的实体列表JSON文件路径
@@ -131,8 +131,8 @@
 4.4. **生成实体清单**
    - 🔴 **强制要求**：必须生成实体清单文件
    - 调用实体清单生成脚本：
-     - Linux/macOS: `python3 {REPO_ROOT}/specify/scripts/python/reverse_entities/entity_list_generator.py --repo-root {REPO_ROOT} --entity-dir {output_dir} --output {output_dir}/实体清单.md --mode generate-list`
-     - Windows: `python {REPO_ROOT}\specify\scripts\python\reverse_entities\entity_list_generator.py --repo-root {REPO_ROOT} --entity-dir {output_dir} --output {output_dir}\实体清单.md --mode generate-list`
+     - Linux/macOS: `python3 {REPO_ROOT}/.infra/scripts/python/reverse_entities/entity_list_generator.py --repo-root {REPO_ROOT} --entity-dir {output_dir} --output {output_dir}/实体清单.md --mode generate-list`
+     - Windows: `python {REPO_ROOT}\.infra\scripts\python\reverse_entities\entity_list_generator.py --repo-root {REPO_ROOT} --entity-dir {output_dir} --output {output_dir}\实体清单.md --mode generate-list`
    - 脚本参数说明：
      - `--repo-root`：仓库根目录
     - `--entity-dir`：实体文档目录（`{REPO_ROOT}/omni-doc/specs/entities/`）
@@ -207,7 +207,7 @@
   - 位置：`{REPO_ROOT}/.cache/reverse/entities/entity-consolidation/consolidated-entities.json`
   - 格式：JSON文件，包含所有融合后的实体信息
 - **实体模板**（必需）：
-  - 强制使用：`{REPO_ROOT}/specify/metamodel/6.entity-template.md`
+  - 强制使用：`{REPO_ROOT}/.infra/metamodel/6.entity-template.md`
   - 格式：Markdown文件，包含实体文档的模板结构
 
 ## 输出

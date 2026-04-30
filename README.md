@@ -175,7 +175,7 @@ You can let `routing` decide automatically by complexity, or force mode with `--
 | Environment | Support | Notes |
 |-------------|---------|-------|
 | [Claude Code](https://code.claude.com/) | Yes | Primary target; install and manage through plugin marketplace and `/market` (or `/plugin`) commands. |
-| Other AI agents | Adapted | The command/skill pattern and `.specify/` layout can be adapted for other agents. |
+| Other AI agents | Adapted | The command/skill pattern and `.infra/` layout can be adapted for other agents. |
 
 ---
 
@@ -209,7 +209,7 @@ your-project/
 ├── .claude/
 │   ├── commands/          # OmniSpec slash commands
 │   └── skills/            # Skills for specify, design, tasks, implement, etc.
-├── .specify/
+├── .infra/
 │   ├── memory/
 │   │   └── constitution.md
 │   ├── metamodel/          # Requirement, context, scenario, architecture, etc.
@@ -238,7 +238,7 @@ your-project/
 
 After installing Co-OmniSpec in Claude Code:
 
-1. **Constitution** — Run `/constitution` and describe your project principles. This creates or updates `.specify/memory/constitution.md`.
+1. **Constitution** — Run `/constitution` and describe your project principles. This creates or updates `.infra/memory/constitution.md`.
 2. **Specify** — Run `/specify` and provide a feature description (what and why). This creates a branch, `changes/<branch>/spec.md`, `context.md`, and a requirements checklist.
 3. **Clarify** (recommended before design) — Run `/clarify` to resolve ambiguities; answers are written back into the spec.
 4. **Design** — Run `/design` with your tech stack. This produces `design.md`, `research.md`, `data-model.md`, `quickstart.md`, and optional `contracts/`.

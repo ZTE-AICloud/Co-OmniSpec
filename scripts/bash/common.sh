@@ -507,7 +507,7 @@ find_template_file() {
     
     # 5. 系统默认模板（OmniSpec 根目录）
     if [[ -n "$omnispec_root" ]]; then
-        local system_default_template="${omnispec_root}/specify/templates/default/${template_filename}"
+        local system_default_template="${omnispec_root}/infra/templates/default/${template_filename}"
         searched_paths+=("$system_default_template")
         if [[ -f "$system_default_template" ]]; then
             echo "$system_default_template"
@@ -515,7 +515,7 @@ find_template_file() {
         fi
         
         # 向后兼容：系统根目录下的模板
-        local system_template="${omnispec_root}/specify/templates/${template_filename}"
+        local system_template="${omnispec_root}/infra/templates/${template_filename}"
         searched_paths+=("$system_template")
         if [[ -f "$system_template" ]]; then
             echo "$system_template"

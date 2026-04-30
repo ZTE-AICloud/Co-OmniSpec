@@ -134,8 +134,8 @@
 4.6. **执行AI分析提取实体（批次处理）**
    - 🔴 **强制要求**：必须调用Python脚本处理批次文件
    - 调用实体抽取脚本：
-     - Linux/macOS: `python3 {REPO_ROOT}/specify/scripts/python/reverse_entities/entity_extractor.py --repo-root {REPO_ROOT} --batch-id {batch_id} --interface-aggregation-dir {interface_aggregation_dir} --user-terminology {user_terminology_file} --output-dir {output_dir}`
-     - Windows: `python {REPO_ROOT}\specify\scripts\python\reverse_entities\entity_extractor.py --repo-root {REPO_ROOT} --batch-id {batch_id} --interface-aggregation-dir {interface_aggregation_dir} --user-terminology {user_terminology_file} --output-dir {output_dir}`
+     - Linux/macOS: `python3 {REPO_ROOT}/.infra/scripts/python/reverse_entities/entity_extractor.py --repo-root {REPO_ROOT} --batch-id {batch_id} --interface-aggregation-dir {interface_aggregation_dir} --user-terminology {user_terminology_file} --output-dir {output_dir}`
+     - Windows: `python {REPO_ROOT}\.infra\scripts\python\reverse_entities\entity_extractor.py --repo-root {REPO_ROOT} --batch-id {batch_id} --interface-aggregation-dir {interface_aggregation_dir} --user-terminology {user_terminology_file} --output-dir {output_dir}`
    - 脚本参数说明：
      - `--repo-root`：仓库根目录
      - `--batch-id`：批次ID（如果单批处理，可以省略）

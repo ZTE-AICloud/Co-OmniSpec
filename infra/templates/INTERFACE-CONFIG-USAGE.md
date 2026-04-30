@@ -49,7 +49,7 @@ post_*
 
 ### 配置示例
 
-完整示例请参考：`.specify/templates/interface-config-simple-example.md`
+完整示例请参考：`.infra/templates/interface-config-simple-example.md`
 
 ## 使用步骤
 
@@ -58,7 +58,7 @@ post_*
 ```bash
 # 系统安装时会自动生成模板文件
 # 如果不存在，可以手动创建：
-cp .specify/templates/interface-config-simple.md .cache/user_input/interface-config.md
+cp .infra/templates/interface-config-simple.md .cache/user_input/interface-config.md
 ```
 
 ### 步骤2：填写接口类型

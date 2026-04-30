@@ -29,7 +29,7 @@
 1. **读取模板**：从 **`.infra/metamodel/1.requirement-template.md`** 读取格式定义（frontmatter 字段与正文结构）。
 2. **按模板填充**：将当前需求的 id、name、type、description 及 EARS 主需求/子需求填入模板对应位置后写出。
 
-若运行环境为安装后的目标项目，模板路径为 **`.infra/metamodel/1.requirement-template.md`**（安装时 specify 被复制到 .infra）。
+若运行环境为安装后的目标项目，模板路径为 **`.infra/metamodel/1.requirement-template.md`**（安装时 OmniSpec 的 `infra/` 等资源落在目标仓库的 `.infra/` 下）。
 
 ## 需求识别规则
 

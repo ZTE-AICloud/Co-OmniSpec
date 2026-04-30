@@ -150,7 +150,7 @@
   - 处理职责：
     - 对批次中的每个功能：
       - 读取功能及其关联的场景、入口点、模块等上下文信息
-      - 先读取模板文件 `specify/metamodel/5.function-template.md` 的完整内容，基于模板原文替换占位符，禁止自行重写章节骨架
+      - 先读取模板文件 `.infra/metamodel/5.function-template.md` 的完整内容，基于模板原文替换占位符，禁止自行重写章节骨架
       - **生成文档文件**：使用 `write` 工具将文档写入 `{REPO_ROOT}/omni-doc/specs/functions/FUNC-XXX-功能名称.md`，其中 `XXX` 与功能ID中的数字部分保持一致
       - **🔴 强制要求**：生成文档时必须使用完整的绝对路径，确保文件写入到 `{REPO_ROOT}/omni-doc/specs/functions/` 目录下
 - 严格按照 `.infra/metamodel/5.function-template.md` 填充Frontmatter字段与各章节内容（包括主流程与异常流程的PlantUML活动图骨架）

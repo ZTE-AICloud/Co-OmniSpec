@@ -28,7 +28,7 @@
 ### 棕地架构连续性与复用优先
 
 - **需求与规格（MUST）**：需求分析、用户故事与成功标准须与仓库内既有的逻辑架构、已批准的设计文档及代码中已落地的架构决策一致；不得在规格中默认引入与现状冲突的新分层、新模块边界或未经验证的技术栈。若必须偏离现状，须在 `spec.md` 中单设说明：**偏离点、理由、影响面、回滚或迁移考虑**。
-  * 编写或评审 `spec.md` 前须对照现有架构资产（如 `omni-doc`、`.specify` 相关产出、逻辑/设计类文档）与关键代码入口，避免「空对空」重写架构。
+  * 编写或评审 `spec.md` 前须对照现有架构资产（如 `omni-doc`、`.infra` 相关产出、逻辑/设计类文档）与关键代码入口，避免「空对空」重写架构。
 
 - **设计（MUST）**：`design.md` 中的技术背景、结构决策与接口方案须在**既有架构、既有设计、当前实现与既有代码逻辑**内演进；优先写清「在哪些现有组件、路径、对象、函数上变更」。**禁止空对空新增设计，禁止脱离现有代码语义另起平行实现**。若新增模块、目录或横切责任，须论证现有扩展点不足以承载，并落入本模板「复杂度跟踪」表。
   * 阶段 0/1 须列出拟修改的**现有**源码位置（文件、类型/对象、函数/方法）；禁止仅输出无锚点的 greenfield 目录树。
@@ -45,7 +45,7 @@
 <!-- 示例: 架构原则 -->
 [PRINCIPLE_1_DESCRIPTION]
 <!--
-    参考文档：`[DOC_DIR]/rules/00-architecture.mdc`（DOC_DIR 可通过环境变量 SPECIFY_DOC_DIR 或 .specify/config 配置，默认为 "omni-doc"）
+    参考文档：`[DOC_DIR]/rules/00-architecture.mdc`（DOC_DIR 可通过环境变量 SPECIFY_DOC_DIR 或 .infra/config 配置，默认为 "omni-doc"）
     内容说明：包含分层架构、领域驱动设计（DDD）、模块划分、依赖原则等
 -->
 
@@ -53,7 +53,7 @@
 <!-- 示例: 接口与通信原则 -->
 [PRINCIPLE_2_DESCRIPTION]
 <!--
-    参考文档：`[DOC_DIR]/rules/01-routing-dispatch.mdc`、`[DOC_DIR]/rules/04-communication.mdc`（DOC_DIR 可通过环境变量 SPECIFY_DOC_DIR 或 .specify/config 配置，默认为 "omni-doc"）
+    参考文档：`[DOC_DIR]/rules/01-routing-dispatch.mdc`、`[DOC_DIR]/rules/04-communication.mdc`（DOC_DIR 可通过环境变量 SPECIFY_DOC_DIR 或 .infra/config 配置，默认为 "omni-doc"）
     内容说明：包含对外处理入口描述，路由与分发机制，入参处理，对外交互机制等
 -->
 
@@ -61,7 +61,7 @@
 <!-- 示例: 状态与数据管理原则 -->
 [PRINCIPLE_3_DESCRIPTION]
 <!--
-    参考文档：`[DOC_DIR]/rules/02-state-management.mdc`、`[DOC_DIR]/rules/03-data-access.mdc`（DOC_DIR 可通过环境变量 SPECIFY_DOC_DIR 或 .specify/config 配置，默认为 "omni-doc"）
+    参考文档：`[DOC_DIR]/rules/02-state-management.mdc`、`[DOC_DIR]/rules/03-data-access.mdc`（DOC_DIR 可通过环境变量 SPECIFY_DOC_DIR 或 .infra/config 配置，默认为 "omni-doc"）
     内容说明：包含状态机制及生命周期，数据库接口等
 -->
 
@@ -69,7 +69,7 @@
 <!-- 示例: 测试与质量保证原则 -->
 [PRINCIPLE_4_DESCRIPTION]
 <!--
-    参考文档：`[DOC_DIR]/rules/09-testing.mdc`（DOC_DIR 可通过环境变量 SPECIFY_DOC_DIR 或 .specify/config 配置，默认为 "omni-doc"）
+    参考文档：`[DOC_DIR]/rules/09-testing.mdc`（DOC_DIR 可通过环境变量 SPECIFY_DOC_DIR 或 .infra/config 配置，默认为 "omni-doc"）
     内容说明：包含测试框架，测试用例命名与格式规范，mock方法，测试文件组织方式，FT/UT分层，TDD方法等
 -->
 
@@ -77,7 +77,7 @@
 <!-- 示例: 可观测性与运维原则 -->
 [PRINCIPLE_5_DESCRIPTION]
 <!--
-    参考文档：`[DOC_DIR]/rules/05-logging.mdc`、`[DOC_DIR]/rules/06-monitoring.mdc`、`[DOC_DIR]/rules/10-deployment.mdc`（DOC_DIR 可通过环境变量 SPECIFY_DOC_DIR 或 .specify/config 配置，默认为 "omni-doc"）
+    参考文档：`[DOC_DIR]/rules/05-logging.mdc`、`[DOC_DIR]/rules/06-monitoring.mdc`、`[DOC_DIR]/rules/10-deployment.mdc`（DOC_DIR 可通过环境变量 SPECIFY_DOC_DIR 或 .infra/config 配置，默认为 "omni-doc"）
     内容说明：包含指标采集，流程统计，告警，内容监控等
 -->
 
@@ -85,21 +85,21 @@
 <!-- 示例: 编码风格与设计模式 -->
 [PRINCIPLE_6_DESCRIPTION]
 <!--
-    参考文档：`[DOC_DIR]/rules/08-style-patterns.mdc`（DOC_DIR 可通过环境变量 SPECIFY_DOC_DIR 或 .specify/config 配置，默认为 "omni-doc"）
+    参考文档：`[DOC_DIR]/rules/08-style-patterns.mdc`（DOC_DIR 可通过环境变量 SPECIFY_DOC_DIR 或 .infra/config 配置，默认为 "omni-doc"）
     内容说明：包含变量命名规范、函数命名规范、代码文件组织原则，设计模式等
 -->
 
 ### 目录结构
 [DIRECTORY_STRUCTURE]
 <!--
-    参考文档：`[DOC_DIR]/rules/00-architecture.mdc`（DOC_DIR 可通过环境变量 SPECIFY_DOC_DIR 或 .specify/config 配置，默认为 "omni-doc"）
+    参考文档：`[DOC_DIR]/rules/00-architecture.mdc`（DOC_DIR 可通过环境变量 SPECIFY_DOC_DIR 或 .infra/config 配置，默认为 "omni-doc"）
     内容说明：包含项目代码主要目录结构及其简要说明，展示项目的组织方式和模块划分
     格式示例：使用树形格式（├──），按以下示例展示所有层级的文件夹
     ├── common/             # 公共模块：跨项目共享的通用组件和工具
     ├── src/                # 核心业务逻辑
     │   ├── network/        # 网络相关处理
     │   └── book/           # 预定服务
-    ├── [DOC_DIR]/          # 项目文档（DOC_DIR 可通过环境变量 SPECIFY_DOC_DIR 或 .specify/config 配置，默认为 "omni-doc"）
+    ├── [DOC_DIR]/          # 项目文档（DOC_DIR 可通过环境变量 SPECIFY_DOC_DIR 或 .infra/config 配置，默认为 "omni-doc"）
     └── test/               # 测试模块：单元测试、集成测试和功能测试
 -->
 
@@ -116,7 +116,7 @@
 <!-- 示例: 配置管理原则 -->
 [OTHER_PRINCIPLE_1_DESCRIPTION]
 <!--
-    参考文档：`[DOC_DIR]/rules/07-config.mdc`（DOC_DIR 可通过环境变量 SPECIFY_DOC_DIR 或 .specify/config 配置，默认为 "omni-doc"）
+    参考文档：`[DOC_DIR]/rules/07-config.mdc`（DOC_DIR 可通过环境变量 SPECIFY_DOC_DIR 或 .infra/config 配置，默认为 "omni-doc"）
     内容说明：包含配置框架，配置生命周期管理，配置加载与验证等
 -->
 

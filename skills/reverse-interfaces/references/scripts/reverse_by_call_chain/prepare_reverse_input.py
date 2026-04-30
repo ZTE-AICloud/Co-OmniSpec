@@ -46,13 +46,11 @@ def prepare(repo_root, codebase, output_dir):
     # 使用 reverse_syntax_parser 的 main.py 执行 prepare
     repository_root = Path(repo_root).resolve()
 
-    # 优先查找scripts/python/reverse_syntax_parser
+    # 优先 `.infra/scripts/python/`（安装布局），其次仓库根 `scripts/python/`（OmniSpec 源码树）
     possible_locations = [
         repository_root / ".infra" / "scripts" / "python" / "reverse_syntax_parser",
-        repository_root / "specify" / "scripts" / "python" / "reverse_syntax_parser",  # 添加无点号的specify路径
-        Path(__file__).resolve().parent.parent / ".infra" / "scripts" / "python" / "reverse_syntax_parser",
-        Path(__file__).resolve().parent.parent / "specify" / "scripts" / "python" / "reverse_syntax_parser",  # 添加无点号的specify路径
-        Path(__file__).resolve().parent / "reverse_syntax_parser",  # 旧位置
+        repository_root / "scripts" / "python" / "reverse_syntax_parser",
+        Path(__file__).resolve().parent / "reverse_syntax_parser",
     ]
 
     main_py = None

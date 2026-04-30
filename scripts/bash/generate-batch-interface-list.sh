@@ -228,10 +228,10 @@ main() {
     # 回写 batch-details-{n}.json 中每个文件条目的状态（根据 temp/interface-{batch}-{idx}.json 是否存在）
     # 说明：这是断点续跑与状态追踪的关键，否则 batch-details 文件内 files[].status 会一直停留在 pending。
     local status_updater=""
-    if [[ -f "$REPO_ROOT/specify/scripts/python/update_batch_details_file_status.py" ]]; then
-        status_updater="$REPO_ROOT/specify/scripts/python/update_batch_details_file_status.py"
+    if [[ -f "$REPO_ROOT/.infra/scripts/python/update_batch_details_file_status.py" ]]; then
+        status_updater="$REPO_ROOT/.infra/scripts/python/update_batch_details_file_status.py"
     elif [[ -f "$REPO_ROOT/scripts/python/update_batch_details_file_status.py" ]]; then
-        # 向后兼容：部分发行版可能使用 .infra 目录
+        # OmniSpec 源码树：脚本位于仓库根 scripts/python/
         status_updater="$REPO_ROOT/scripts/python/update_batch_details_file_status.py"
     fi
 

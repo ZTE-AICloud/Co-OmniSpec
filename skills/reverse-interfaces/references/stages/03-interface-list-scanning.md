@@ -298,7 +298,7 @@ AI Agent需要按照以下决策树执行分析：
      - `{input_base_dir}/internal/syntax_parser/all_methods.json`
      - `{input_base_dir}/internal/syntax_parser/all_functions.json`
    - **步骤 4：若三个文件均存在** → 继续执行 3B.2
-   - **步骤 5：若任一文件不存在** → 使用步骤 1 已确定的脚本路径（.infra 或 specify）调用脚本生成：
+   - **步骤 5：若任一文件不存在** → 使用步骤 1 已确定的 `PREPARE_SCRIPT` 绝对路径调用脚本生成：
      ```bash
      python3 {PREPARE_SCRIPT} \
        --repo-root {REPO_ROOT} \

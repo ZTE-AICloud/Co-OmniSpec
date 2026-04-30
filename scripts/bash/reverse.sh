@@ -338,7 +338,7 @@ AI 分析结果（由 AI Agent 传递）：
   reverse.sh --target interfaces --incremental --git-diff HEAD~1 --merge
 
 更多信息：
-  请参考设计文档：specify/design/omni_reverse_interface_inventory_design.md
+  请参考设计文档：infra/design/omni_reverse_interface_inventory_design.md
 
 EOF
 }
@@ -1490,7 +1490,7 @@ main() {
     else
         # 非 AI Agent 模式：显示完整信息
         log_warn "警告：这是第一阶段的基础框架，具体功能将在后续任务中实现"
-        log_info "功能开发进度请参考任务清单：specify/design/omni_reverse_tasks.md"
+        log_info "功能开发进度请参考任务清单：infra/design/omni_reverse_tasks.md"
         log_info ""
         log_info "提示：在 AI Agent 环境中，AI Agent 会执行分析任务并传递结果给脚本"
         log_info "脚本接收 AI 分析结果的方式："
