@@ -1,0 +1,107 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ai-friendly-arch-guard-module-single-responsibility output",
+  "description": "单模块 SRP 分析结果格式（v1.3）",
+  "type": "object",
+  "required": ["skill_id", "rule_version", "module_path", "scan_mode", "execute_status", "start_time", "end_time", "duration_ms", "metric_result", "violation_info", "statistic_info"],
+  "properties": {
+    "skill_id": { "type": "string", "const": "ai-friendly-arch-guard-module-single-responsibility" },
+    "rule_version": { "type": "string", "example": "v1.3" },
+    "module_path": { "type": "string", "description": "模块目录相对路径，供上层编排读取" },
+    "scan_mode": { "type": "string", "enum": ["increment", "full"] },
+    "execute_status": { "type": "string", "enum": ["success", "failed"] },
+    "start_time": { "type": "string", "format": "date-time", "description": "ISO8601时间戳" },
+    "end_time": { "type": "string", "format": "date-time", "description": "ISO8601时间戳" },
+    "duration_ms": { "type": "integer", "description": "执行耗时毫秒数" },
+    "metric_result": {
+      "type": "object",
+      "required": ["total_score", "confidence", "score_detail", "confidence_detail"],
+      "properties": {
+        "total_score": { "type": "number", "minimum": 0, "maximum": 100, "description": "总分0-100" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1, "description": "置信度0-1" },
+        "score_detail": {
+          "type": "object",
+          "properties": {
+            "directory_single_score": { "type": "number", "minimum": 0, "maximum": 100 },
+            "module_cohesion_score": { "type": "number", "minimum": 0, "maximum": 100 },
+            "file_single_score": { "type": "number", "minimum": 0, "maximum": 100 }
+          }
+        },
+        "confidence_detail": {
+          "type": "object",
+          "properties": {
+            "structure_confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+            "semantic_confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+            "context_confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+          }
+        }
+      }
+    },
+    "violation_info": {
+      "type": "object",
+      "required": ["total_count", "level_summary", "list", "exempt_list"],
+      "properties": {
+        "total_count": { "type": "integer", "minimum": 0 },
+        "level_summary": {
+          "type": "object",
+          "properties": {
+            "P0": { "type": "integer" },
+            "P1": { "type": "integer" },
+            "P2": { "type": "integer" }
+          }
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "violation_type": { "type": "string" },
+              "violation_level": { "type": "string", "enum": ["P0", "P1", "P2"] },
+              "scope_path": { "type": "string" },
+              "resource_list": { "type": "array", "items": { "type": "string" } },
+              "suggestion_summary": { "type": "string" }
+            }
+          }
+        },
+        "exempt_list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "exempt_type": { "type": "string" },
+              "scope_path": { "type": "string" },
+              "exempt_reason": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "statistic_info": {
+      "type": "object",
+      "properties": {
+        "total_scanned_units": {
+          "type": "object",
+          "properties": {
+            "directories": { "type": "integer" },
+            "modules": { "type": "integer" },
+            "files": { "type": "integer" }
+          }
+        },
+        "violation_units": {
+          "type": "object",
+          "properties": {
+            "modules": { "type": "integer" },
+            "files": { "type": "integer" }
+          }
+        },
+        "valid_units": {
+          "type": "object",
+          "properties": {
+            "modules": { "type": "integer" },
+            "files": { "type": "integer" }
+          }
+        }
+      }
+    }
+  }
+}

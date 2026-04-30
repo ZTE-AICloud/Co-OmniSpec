@@ -1,0 +1,233 @@
+#!/usr/bin/env bash
+# 批量更新接口扫描批次状态工具 (Bash版本)
+# 批量更新多个批次的处理状态
+
+set -e
+
+# 初始化变量
+REPO_ROOT=""
+BATCH_UPDATES=""
+
+# 显示帮助信息
+show_help() {
+    cat << 'EOF'
+批量更新接口扫描批次状态工具 (Bash版本)
+批量更新多个批次的处理状态
+
+使用方法:
+    ./update-batches-status.sh --repo-root <repo_root> --batch-updates '<batch_updates_json>'
+
+参数:
+    --repo-root: 仓库根目录路径
+    --batch-updates: 批次更新信息的JSON字符串，格式为 [{"batch_number": 1, "status": "completed"}, ...]
+    --help, -h: 显示此帮助信息
+EOF
+}
+
+# 解析命令行参数
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --repo-root)
+            REPO_ROOT="$2"
+            shift 2
+            ;;
+        --batch-updates)
+            BATCH_UPDATES="$2"
+            shift 2
+            ;;
+        --help|-h)
+            show_help
+            exit 0
+            ;;
+        *)
+            echo "未知参数: $1" >&2
+            show_help
+            exit 1
+            ;;
+    esac
+done
+
+# 验证必需参数
+if [[ -z "$REPO_ROOT" ]] || [[ -z "$BATCH_UPDATES" ]]; then
+    echo "错误: 必须提供 --repo-root 和 --batch-updates 参数" >&2
+    show_help
+    exit 1
+fi
+
+# 验证仓库根目录
+if [[ ! -d "$REPO_ROOT" ]]; then
+    echo "错误: 仓库根目录不存在 $REPO_ROOT" >&2
+    exit 1
+fi
+
+# 导入通用函数
+SCRIPT_DIR="$(CDPATH="" cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/common.sh"
+
+CACHE_DIR="$REPO_ROOT/.cache/reverse/interfaces"
+TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+
+# 更新单个批次状态
+update_single_batch_status() {
+    local batch_number="$1"
+    local status="$2"
+    local updated=false
+
+    # 更新批次映射文件
+    local batch_mapping_file="$CACHE_DIR/batch-mapping.json"
+    if [[ -f "$batch_mapping_file" ]]; then
+        # 使用jq更新批次状态
+        if jq --arg bn "$batch_number" --arg st "$status" --arg lu "$TIMESTAMP" '
+            .batches |= map(if (.batch_number | tostring) == $bn then .status = $st | .last_updated = $lu else . end)
+        ' "$batch_mapping_file" > "$batch_mapping_file.tmp" 2>/dev/null; then
+            mv "$batch_mapping_file.tmp" "$batch_mapping_file"
+            updated=true
+        else
+            rm -f "$batch_mapping_file.tmp"
+        fi
+    fi
+
+    # 更新批次详细文件
+    local batch_details_file="$CACHE_DIR/batch-details-$batch_number.json"
+    if [[ -f "$batch_details_file" ]]; then
+        if jq --arg st "$status" --arg lu "$TIMESTAMP" '
+            .status = $st | .last_updated = $lu
+        ' "$batch_details_file" > "$batch_details_file.tmp" 2>/dev/null; then
+            mv "$batch_details_file.tmp" "$batch_details_file"
+        else
+            rm -f "$batch_details_file.tmp"
+        fi
+    fi
+
+    # 更新批次状态文件
+    local batch_status_file="$CACHE_DIR/interface_scanning-batch-status.json"
+    if [[ -f "$batch_status_file" ]]; then
+        local update_expr=""
+        case "$status" in
+            "completed")
+                update_expr='.processed_batches += 1 | .current_batch = ($bn | tonumber)'
+                ;;
+            "failed")
+                update_expr='.failed_batches += 1'
+                ;;
+        esac
+
+        if [[ -n "$update_expr" ]]; then
+            if jq --arg bn "$batch_number" --arg st "$status" --arg lu "$TIMESTAMP" "
+                $update_expr | .last_update = \$lu |
+                .batch_mappings |= map(if (.batch_number | tostring) == \$bn then .status = \$st else . end)
+            " "$batch_status_file" > "$batch_status_file.tmp" 2>/dev/null; then
+                mv "$batch_status_file.tmp" "$batch_status_file"
+            else
+                rm -f "$batch_status_file.tmp"
+            fi
+        else
+            # 只更新最后更新时间
+            if jq --arg lu "$TIMESTAMP" '
+                .last_update = $lu
+            ' "$batch_status_file" > "$batch_status_file.tmp" 2>/dev/null; then
+                mv "$batch_status_file.tmp" "$batch_status_file"
+            else
+                rm -f "$batch_status_file.tmp"
+            fi
+        fi
+    fi
+
+    # 输出结果
+    if [[ "$updated" == true ]]; then
+        echo "{\"batch_number\": $batch_number, \"status\": \"$status\", \"success\": true}"
+    else
+        echo "{\"batch_number\": $batch_number, \"status\": \"$status\", \"success\": false}"
+    fi
+}
+
+# 批量更新批次状态
+update_batches_status() {
+    local batch_updates="$1"
+
+    # 验证JSON格式
+    if ! echo "$batch_updates" | jq empty 2>/dev/null; then
+        echo "错误: 无效的JSON格式" >&2
+        exit 1
+    fi
+
+    # 检查是否为数组
+    if ! echo "$batch_updates" | jq -e 'type == "array"' >/dev/null 2>&1; then
+        echo "错误: 批次更新信息必须是数组格式" >&2
+        exit 1
+    fi
+
+    # 初始化结果数组
+    local results="[]"
+    local success_count=0
+    local failed_count=0
+
+    # 遍历所有批次更新
+    local length
+    length=$(echo "$batch_updates" | jq 'length')
+
+    for ((i=0; i<length; i++)); do
+        local update_item
+        update_item=$(echo "$batch_updates" | jq ".[$i]")
+
+        local batch_number
+        batch_number=$(echo "$update_item" | jq -r '.batch_number')
+
+        local status
+        status=$(echo "$update_item" | jq -r '.status')
+
+        # 验证必需字段
+        if [[ "$batch_number" == "null" ]] || [[ "$status" == "null" ]]; then
+            results=$(echo "$results" | jq ". += [{\"batch_number\": $batch_number, \"error\": \"缺少批次编号或状态\", \"success\": false}]")
+            ((failed_count++))
+            continue
+        fi
+
+        # 验证状态
+        if [[ "$status" != "pending" ]] && [[ "$status" != "processing" ]] && [[ "$status" != "completed" ]] && [[ "$status" != "failed" ]]; then
+            results=$(echo "$results" | jq ". += [{\"batch_number\": $batch_number, \"error\": \"无效的状态 '$status'\", \"success\": false}]")
+            ((failed_count++))
+            continue
+        fi
+
+        # 更新批次状态
+        local result
+        result=$(update_single_batch_status "$batch_number" "$status")
+        local success
+        success=$(echo "$result" | jq -r '.success')
+
+        if [[ "$success" == "true" ]]; then
+            results=$(echo "$results" | jq ". += [$result]")
+            ((success_count++))
+        else
+            results=$(echo "$results" | jq ". += [{\"batch_number\": $batch_number, \"error\": \"未找到指定的批次\", \"success\": false}]")
+            ((failed_count++))
+        fi
+    done
+
+    # 计算成功和失败的数量
+    local success_length=$success_count
+    local failed_length=$failed_count
+
+    # 输出最终结果
+    cat << EOF
+{
+  "success": $success_length,
+  "failed": $failed_length,
+  "details": $results
+}
+EOF
+
+    # 如果有任何失败，返回非零退出码
+    if [[ $failed_length -gt 0 ]]; then
+        exit 1
+    fi
+}
+
+# 主函数
+main() {
+    update_batches_status "$BATCH_UPDATES"
+}
+
+# 执行主函数
+main

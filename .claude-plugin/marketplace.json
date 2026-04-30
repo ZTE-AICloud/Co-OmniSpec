@@ -1,0 +1,12 @@
+{
+  "name": "CoMind-plugins",
+  "owner": {
+    "name": "ZTE"
+  },
+  "plugins": [
+    {
+      "name": "omni",
+      "source": "./"
+    }
+  ]
+}

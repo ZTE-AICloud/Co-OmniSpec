@@ -1,0 +1,13 @@
+{
+    "chat.promptFilesRecommendations": {
+        "constitution": true,
+        "specify": true,
+        "design": true,
+        "tasks": true,
+        "implement": true
+    },
+    "chat.tools.terminal.autoApprove": {
+        ".specify/scripts/bash/": true,
+        ".specify/scripts/powershell/": true
+    }
+}

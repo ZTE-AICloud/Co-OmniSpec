@@ -1,0 +1,10 @@
+{
+  "name": "omni",
+  "version": "1.0.0",
+  "description": "一个Harness工程解决方案插件包",
+  "author": {
+	"name": "ZTE"
+  },
+  "license": "MIT",
+  "keywords": ["SDD", "Harness engineer"]
+}

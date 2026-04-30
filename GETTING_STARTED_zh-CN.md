@@ -1,18 +1,21 @@
 # Co-OmniSpec 入门指南
 
-本文介绍如何安装 Co-OmniSpec，并在 Cursor 中完成第一次规范驱动开发流程。
+本文介绍如何以 Claude Code 插件方式安装 Co-OmniSpec，并完成第一次规范驱动开发流程。
 
 ---
 
 ## 目录
 
-- [前置条件](#前置条件)
-- [安装](#安装)
-- [验证安装](#验证安装)
-- [首次使用：章程](#首次使用章程)
-- [首次使用：规格编写](#首次使用规格编写)
-- [下一步](#下一步)
-
+- [Co-OmniSpec 入门指南](#co-omnispec-入门指南)
+  - [目录](#目录)
+  - [前置条件](#前置条件)
+  - [安装](#安装)
+    - [方式一：从克隆的仓库安装](#方式一从克隆的仓库安装)
+    - [方式二：从发布包安装](#方式二从发布包安装)
+  - [验证安装](#验证安装)
+  - [首次使用：章程](#首次使用章程)
+  - [首次使用：规格编写](#首次使用规格编写)
+  - [下一步](#下一步)
 ---
 
 ## 前置条件
@@ -21,72 +24,57 @@
 
 | 要求 | 说明 |
 |------|------|
-| **Cursor** | [cursor.sh](https://cursor.sh/) 或支持斜杠命令的兼容 IDE。 |
+| **Claude Code** | [code.claude.com](https://code.claude.com/)（需支持插件市场）。 |
 | **Git** | 用于特性分支与 `changes/` 目录。 |
-| **Bash**（Linux/macOS）或 **PowerShell**（Windows） | 用于运行安装与项目脚本。 |
 
 ---
 
 ## 安装
 
-### 方式一：从克隆的仓库安装
+### 方式一：会话命令安装（推荐）
 
-1. **克隆 Co-OmniSpec**（或下载并解压仓库）：
+1. 在 Claude Code 会话中添加市场：
 
-   ```bash
-   git clone <你的-omnispec2-仓库地址> omnispec2
-   cd omnispec2
+   ```text
+   /plugin marketplace add ZTE-AICloud/Co-OmniSpec
    ```
 
-2. **在 `build/` 目录下执行安装脚本**。
+   也可使用简写：
 
-   **Linux / macOS：**
-
-   ```bash
-   ./build/install.sh cursor /path/to/your/target/project
+   ```text
+   /market add ZTE-AICloud/Co-OmniSpec
    ```
 
-   **Windows（PowerShell）：**
+2. 安装插件：
 
-   ```powershell
-   .\build\install.ps1 cursor C:\path\to\your\target\project
+   ```text
+   /plugin install omni@CoMind-plugins
    ```
 
-   将 `/path/to/your/target/project` 替换为**你要用 Cursor 开发的目标项目的绝对路径**。
+3. **结果：** Claude Code 会安装 OmniSpec 所需命令、技能与 Hook。
 
-3. **结果：** 安装脚本会复制：
+### 方式二：Claude 命令行安装
 
-   - Co-OmniSpec 的 `src/agent/`（命令与技能）到目标项目的 `.cursor/`；
-   - Co-OmniSpec 的 `src/specify/` 到目标项目的 `.specify/`。
+如果你偏好命令行方式，可执行：
 
-   之后在 Cursor 中打开目标项目即可使用 OmniSpec 命令。
-
-### 方式二：从发布包安装
-
-若你有预构建的 zip（例如来自 CI 或发布页）：
-
-1. 将 zip 解压到某一目录（如 `omnispec2-build`）。
-2. 在该目录下执行与上面相同的安装命令，并指向目标项目：
-
-   ```bash
-   ./install.sh cursor /path/to/your/project
-   ```
-
-   （Windows 下使用 `install.ps1`，参数相同。）
+```bash
+claude plugin marketplace add ZTE-AICloud/Co-OmniSpec
+claude plugin install omni@CoMind-plugins
+```
 
 ---
 
 ## 验证安装
 
-1. **在 Cursor 中打开目标项目**（即传入 `install.sh` / `install.ps1` 的那个路径）。
+1. **在 Claude Code 中打开目标项目**。
 2. **打开 AI 对话**，确认可以触发 OmniSpec 命令，例如：
-   - `/omni.constitution`
-   - `/omni.specify`
-3. **确认项目中存在以下路径：**
-   - `.cursor/commands/` — 包含 `omni.*.md` 命令文件；
-   - `.specify/` — 包含 `memory/`、`metamodel/`、`scripts/`、`templates/`。
+   - `/constitution`
+   - `/specify`
+3. **确认市场/插件状态：**
+   - 运行 `/plugin marketplace list`（或 `/market list`）确认存在 `CoMind-plugins`；
+   - 运行 `/plugin`（Discover）或 `/market`，确认可看到并使用 `omni`。
 
-若缺失，请重新执行安装脚本并确认目标路径正确。
+若未生效，请重新执行添加市场与安装插件命令。
 
 ---
 
@@ -94,11 +82,11 @@
 
 章程定义项目的原则与约束，后续的规格、设计、任务与实现都应与之一致。
 
-1. 在 Cursor 中打开 AI 对话。
+1. 在 Claude Code 中打开 AI 对话。
 2. 执行：
 
    ```
-   /omni.constitution
+   /constitution
    ```
 
 3. 在同一句或下一句中加入你希望的原则描述，例如：
@@ -119,7 +107,7 @@
 1. **创建特性分支与规范**，执行：
 
    ```
-   /omni.specify
+   /specify
    ```
 
 2. **在同一句或下一句提供功能描述**。侧重“做什么”和“为什么”，暂不写技术栈。示例：
@@ -135,18 +123,19 @@
    - 在 `changes/` 下创建目录（如 `changes/001-photo-albums/`）；
    - 生成 `spec.md`、`context.md` 以及 `checklists/` 下的需求检查清单。
 
-4. **检查**生成的 `changes/<分支名>/spec.md` 与 `checklists/requirements.md`。若有不清楚之处，可接着运行 `/omni.clarify`。
+4. **检查**生成的 `changes/<分支名>/spec.md` 与 `checklists/requirements.md`。若有不清楚之处，可接着运行 `/clarify`。
 
 ---
 
 ## 下一步
 
-- **澄清** — 运行 `/omni.clarify` 消除规范中的歧义（建议在设计前执行）。
-- **设计** — 运行 `/omni.design` 并描述技术栈与架构，生成 `design.md`、数据模型、契约等。
-- **任务** — 运行 `/omni.tasks` 根据设计生成 `tasks.md`。
-- **分析** — 运行 `/omni.analyze` 检查 spec、design、tasks 之间的一致性。
-- **实施** — 运行 `/omni.implement` 按顺序执行任务。
+- **澄清** — 运行 `/clarify` 消除规范中的歧义（建议在设计前执行）。
+- **设计** — 运行 `/design` 并描述技术栈与架构，生成 `design.md`、数据模型、契约等。
+- **任务** — 运行 `/tasks` 根据设计生成 `tasks.md`。
+- **分析** — 运行 `/analyze` 检查 spec、design、tasks 之间的一致性。
+- **实施** — 运行 `/implement` 按顺序执行任务。
+- **归档** — 运行 `/archive` 对已完成特性进行归档/回流。
 
 完整工作流与所有命令说明见 [用户指南](USER_GUIDE_zh-CN.md)。
 
-构建与发布脚本（打 zip 包、版本号等）见 [构建说明](../build/readme.md)。
+

@@ -1,0 +1,4 @@
+{
+  "mode": "A",
+  "_comment": "可选值: A=原有接口清单扫描(架构+Few-shot+分批), B=reverse调用链扫描. 复制本文件为 interface-scan-mode.json 可预选方式，无需交互确认."
+}

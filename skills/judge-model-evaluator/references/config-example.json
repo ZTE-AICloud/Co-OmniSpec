@@ -1,0 +1,24 @@
+{
+    "api": {
+        "url": "https://api.example.com/v1/chat/completions",
+        "key": "Bearer your-api-key-here",
+        "model_name": "gpt-4",
+        "timeout": 60,
+        "max_tokens": 16384,
+        "temperature": 0.1
+    },
+    "input": {
+        "feature_infos": [
+            {
+                "变更描述": "Add user authentication functionality with JWT tokens"
+            }
+        ],
+        "code_blocks": {
+            "app.py": [
+                "import jwt\nfrom datetime import datetime, timedelta\n\ndef generate_token(user_id):\n    payload = {\n        'user_id': user_id,\n        'exp': datetime.utcnow() + timedelta(hours=24)\n    }\n    return jwt.encode(payload, 'secret-key', algorithm='HS256')"
+            ]
+        },
+        "code_answers": null,
+        "output": "evaluation_result.json"
+    }
+}

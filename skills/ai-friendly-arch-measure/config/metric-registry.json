@@ -1,0 +1,32 @@
+{
+  "version": "1.0",
+  "dimensions": [
+    "上下文窗口适配性",
+    "语义可理解性",
+    "结构可导航性",
+    "变更局部性",
+    "测试可验证性",
+    "模式一致性",
+    "文档完备性"
+  ],
+  "metrics": [
+    {
+      "skill_id": "ai-friendly-component-srp-orchestrate",
+      "display_name": "模块单一职责",
+      "dimension": "结构可导航性",
+      "tags": ["default"],
+      "enabled": true,
+      "description": "检测模块是否遵守单一职责原则，输出 SRP 合规评分",
+      "output_path_hint": "output/srp/summary.json"
+    },
+    {
+      "skill_id": "ai-friendly-metric-token-count",
+      "display_name": "Token 数统计",
+      "dimension": "上下文窗口适配性",
+      "tags": ["default"],
+      "enabled": false,
+      "description": "统计各模块/文件的 Token 数，评估代码体积对 AI 理解成本的影响",
+      "output_path_hint": "output/token/summary.json"
+    }
+  ]
+}

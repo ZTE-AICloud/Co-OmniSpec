@@ -1,0 +1,18 @@
+# reverse_syntax_parser 使用的 LLM 配置（本仓库自持，不依赖 reverse 目录）
+# 默认与 scripts/bash/reverse.sh 环境变量、reverse/tools/config.yaml llm 段一致，便于同环境复用
+# 支持环境变量占位：${VAR} 或 ${VAR:默认值}
+
+llm:
+  provider: openai
+  # 必填：请设置环境变量 OPENAI_API_KEY 或在此填写（勿提交密钥到仓库）
+  api_key: ${OPENAI_API_KEY:42r3fcxv4llhe8jem0h5l9zgvw6ho6j1}
+  # 默认走统一网关（与 reverse 一致），可被 OPENAI_URL 覆盖；脚本会自动补 /chat/completions
+  api_url: ${OPENAI_URL:https://maas-apigateway.dt.zte.com.cn/model/ai-ide/model-separation/v1/}
+  model: ${OPENAI_MODEL:Qwen3-Coder-480B-A35B-Instruct-FP8}
+  temperature: 0.2
+  max_tokens: 200000
+  timeout: 300
+  max_concurrent: 30
+  max_retries: 10
+  retry_delay: 30.0
+  retry_backoff: 2.0

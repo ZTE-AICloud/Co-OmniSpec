@@ -1,0 +1,66 @@
+flowchart TB
+    subgraph INPUT["📥 输入层"]
+        direction TB
+        A1["--repo-root<br/>(默认: .)"]
+        A2["--target-dir<br/>(默认: networking_zte)"]
+        A3["--branch<br/>(自动检测)"]
+    end
+
+    subgraph GIT["🐙 Git 仓库层"]
+        G1["git diff --cached -U3"]
+        G2["git diff -U3"]
+        G3["git ls-files --others"]
+    end
+
+    subgraph PARSE["🔧 解析层"]
+        direction TB
+        P1["split_diff_by_file()<br/>按文件拆分diff"]
+        P2["extract_code_snippets_from_patch()<br/>提取 +/- 变更行"]
+        P3["parse_feature_infos()<br/>从tasks.md提取目的"]
+    end
+
+    subgraph BUILD["🏗️ 构建层"]
+        direction TB
+        B1["get_changed_files()<br/>获取变更文件列表"]
+        B2["build_code_blocks()<br/>构建 code_blocks 字典"]
+        B3["build_payload()<br/>组装完整JSON结构"]
+    end
+
+    subgraph OUTPUT["📤 输出层"]
+        O1["changes/{branch}/evalset/<br/>config.result.json"]
+    end
+
+    subgraph JSON_STRUCTURE["📋 JSON 结构"]
+        J1["api: {url, key, model_name,<br/>timeout, max_tokens, temperature}"]
+        J2["input: {feature_infos,<br/>code_blocks, code_answers, output}"]
+    end
+
+    INPUT --> GIT
+    A3 -->|"获取分支名"| GIT
+    GIT --> P1
+    P1 --> P2
+    P2 --> B2
+    B2 --> B3
+    B3 --> BUILD
+
+    subgraph TASKS["📄 tasks.md"]
+        T1["**目的**: 项目初始化和基本结构"]
+        T2["**目的**: 核心基础设施"]
+        T3["**目的**: 迪普FW设备通信驱动"]
+        T4["**目的**: 端到端功能验证"]
+        T5["**目的**: 多用户故事改进"]
+    end
+
+    TASKS --> P3
+    P3 -->|"feature_infos"| B3
+
+    B3 --> JSON_STRUCTURE
+    JSON_STRUCTURE --> OUTPUT
+
+    style INPUT fill:#e1f5fe
+    style GIT fill:#fff3e0
+    style PARSE fill:#f3e5f5
+    style BUILD fill:#e8f5e9
+    style OUTPUT fill:#fce4ec
+    style JSON_STRUCTURE fill:#e0f7fa
+    style TASKS fill:#fff8e1

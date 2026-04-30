@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ai-friendly-module-identifier output",
+  "description": "模块识别结果格式（v1.0）",
+  "type": "object",
+  "required": ["skill_id", "rule_version", "scan_depth", "execute_status", "start_time", "end_time", "duration_ms", "project_path", "modules", "statistics"],
+  "properties": {
+    "skill_id": { "type": "string", "const": "ai-friendly-module-identifier" },
+    "rule_version": { "type": "string", "example": "v1.0" },
+    "scan_depth": { "type": "string", "enum": ["shallow", "deep"] },
+    "execute_status": { "type": "string", "enum": ["success", "failed"] },
+    "start_time": { "type": "string", "format": "date-time" },
+    "end_time": { "type": "string", "format": "date-time" },
+    "duration_ms": { "type": "integer" },
+    "project_path": { "type": "string", "description": "项目根目录路径" },
+    "modules": {
+      "type": "object",
+      "description": "按架构层分类的模块列表",
+      "properties": {
+        "核心业务域": { "$ref": "#/definitions/moduleList" },
+        "数据持久层": { "$ref": "#/definitions/moduleList" },
+        "接口适配层": { "$ref": "#/definitions/moduleList" },
+        "基础设施层": { "$ref": "#/definitions/moduleList" },
+        "公共工具层": { "$ref": "#/definitions/moduleList" }
+      }
+    },
+    "statistics": {
+      "type": "object",
+      "properties": {
+        "total_modules": { "type": "integer" },
+        "total_files": { "type": "integer" },
+        "total_lines": { "type": "integer" },
+        "by_category": {
+          "type": "object",
+          "properties": {
+            "核心业务域": { "type": "integer" },
+            "数据持久层": { "type": "integer" },
+            "接口适配层": { "type": "integer" },
+            "基础设施层": { "type": "integer" },
+            "公共工具层": { "type": "integer" }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "moduleList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "name", "depth", "files"],
+        "properties": {
+          "path": { "type": "string", "description": "相对路径" },
+          "name": { "type": "string", "description": "目录名" },
+          "depth": { "type": "integer", "description": "目录深度" },
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "lines": { "type": "integer" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

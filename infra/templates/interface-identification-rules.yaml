@@ -1,0 +1,43 @@
+# 接口识别规则配置
+# 版本: 1.0
+# 说明: 用户可配置的接口识别规则，用于指导 AI 识别接口类型
+# 位置: 此文件位于 .cache/user_input/interface-identification-rules.yaml，根据项目需求修改
+
+version: "1.0"
+description: "接口识别规则配置（用户可配置）"
+
+# ============================================
+# 支持的接口类型清单
+# ============================================
+# 以下列出了所有支持的接口类型，您可以根据项目需求选择要反构的接口类型
+# 如果配置文件中只包含 cli 类型，则只会识别和生成 cli 类型的接口，其他类型将被忽略
+#
+# 支持的接口类型：
+#   - restful: RESTful API 接口（基于 HTTP 的 RESTful 接口，通常使用 @app.route、@RequestMapping、@GetMapping 等装饰器/注解）
+#   - message: 消息类接口（消息队列、事件总线、消息订阅等接口，如 @RabbitListener、@KafkaListener、subscribe() 等）
+#   - module: 模块间接口（模块间调用的公共接口，如服务接口、内部 API，通过跨模块调用模式识别）
+#   - cli: 命令行接口（命令行工具、CLI 命令接口，如 @click.command()、argparse、CommandLineRunner 等）
+#   - rpc: RPC 接口（远程过程调用接口，如 gRPC、Thrift、Dubbo 等）
+#   - function: 函数接口（普通的函数或方法，不涉及网络调用或特殊装饰器）
+#   - other: 其他类型接口（无法明确分类的接口）
+#
+# 配置说明：
+#   1. 在 interface_types 下只配置您需要反构的接口类型
+#   2. 如果只配置 cli 类型，则只会识别和生成 cli 类型的接口
+#   3. 每个接口类型可以配置 constraints（约束规则），使用自然语言描述即可
+#   4. AI Agent 会自动将自然语言约束规则转换为检索规则
+# ============================================
+
+# 接口识别规则和约束信息
+identification_rules:
+  # 按接口类型配置识别规则
+  # 注意：只配置您需要反构的接口类型，未配置的类型将被忽略
+  interface_types:
+    # 模块间接口示例：使用自然语言描述约束规则
+    module:
+      # 文字类约束规则（自然语言描述，AI Agent 自动转换为检索规则）
+      constraints:
+        # 示例：特定目录下的插件文件
+        - description: "在每个目录下 zenic_xx_plugin.py 文件中，create_、delete_、update_ 开头的函数"
+          # AI Agent 会自动理解并转换为检索规则，无需用户编写正则表达式
+
