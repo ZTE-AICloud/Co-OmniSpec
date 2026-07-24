@@ -1,0 +1,15 @@
+=== resolve-feature-context.sh ===
+PASS: only feature-dir -> derived branch
+PASS: only feature-dir -> preset true
+PASS: only branch-name -> changes path
+PASS: nested path
+PASS: nested basename branch
+PASS: no input -> preset false
+PASS: outside changes/ -> exit 1
+PASS: CLI overrides export
+PASS: OMNISPEC_FEATURE_DIR priority
+PASS: mixed CLI dir + env branch
+=== build-specify-feature-args.sh ===
+PASS: build args for preset
+PASS: build args empty when no preset
+=== summary: 9 passed, 0 failed ===

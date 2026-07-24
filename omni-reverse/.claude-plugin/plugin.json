@@ -1,0 +1,14 @@
+{
+  "name": "omni-reverse",
+  "version": "v3.1.0",
+  "description": "OmniSpec逆向工程（反构）插件：从代码库反构架构、逻辑架构、接口、功能、实体、场景、需求、规约等要素，生成标准化SDD文档。支持全流程反构、按要素专项反构多种模式",
+  "homepage": "https://github.com/ZTE-AICloud/Co-OmniSpec",
+  "author": {
+    "name": "ZTE-AICloud"
+  },
+  "license": "MIT",
+  "keywords": ["reverse-engineering", "SDD", "反构"],
+  "dependencies": [
+    "omni-dsdd"
+  ]
+}

@@ -1,0 +1,107 @@
+name: standard
+flow_mode: standard
+description: 标准模式，包含完整 specify/clarify/design
+
+state_management:
+  start_from_stage: specify
+  status_script: workflow-update-state.sh
+  gate_script: workflow-gate.sh
+
+stages:
+  - name: specify
+    type: agent
+    skill: omni-dsdd:specify
+    complete_marker: specify
+    gate:
+      skill: omni-dsdd:specify
+      script: verify-specify-artifacts.sh
+      eval_file: eval-specify-report.yaml
+      min_score: 95
+      blocking: true
+    auto_converge:
+      max_retries: 5
+      inject_fixes: true
+    pass_context:
+      - PRESET_SPECIFY_ARGS
+      - ENABLE_E2E
+
+  - name: clarify
+    type: agent
+    skill: omni-dsdd:clarify
+    complete_marker: clarify
+    eval_file: eval-specify-report.yaml
+    eval_stage: clarify
+    min_score: 95
+    blocking: true
+    auto_converge:
+      max_retries: 5
+      inject_fixes: true
+
+  - name: design
+    type: agent
+    skill: omni-dsdd:design
+    complete_marker: design
+    requires_env: true
+    eval_file: eval-design-summary.json
+    min_score: 95
+    blocking: true
+    auto_converge:
+      max_retries: 5
+      inject_fixes: true
+    pass_context:
+      - ENABLE_E2E
+
+  - name: tasks
+    type: agent
+    skill: omni-dsdd:tasks
+    complete_marker: tasks
+    silent: true
+
+  - name: analyze
+    type: agent
+    skill: omni-dsdd:analyze
+    complete_marker: analyze
+    silent: true
+    requires_env: true
+    auto_fix_unlimited: true
+
+  - name: implement
+    type: agent
+    skill: omni-dsdd:implement
+    complete_marker: implement
+    silent: true
+    requires_env: true
+    checklist: true
+
+  - name: review
+    type: parallel_agents
+    skills:
+      - omni-dsdd:security-review
+      - omni-dsdd:code-review
+    complete_marker: review
+    silent: true
+    requires_env: true
+    critical_fix_and_rereview: true
+
+  - name: local-sandbox-fix
+    type: agent
+    skill: omni-dsdd:local-sandbox-fix
+    complete_marker: local-sandbox-fix
+    silent: true
+    requires_env: true
+    gate:
+      skill: omni-dsdd:local-sandbox-fix
+      script: local-sandbox-fix-workflow-gate.sh
+      check: complete
+    pass_context:
+      - FEATURE_DIR
+
+rollback_stage_map:
+  specify: 0
+  clarify: 1
+  design: 2
+  tasks: 3
+  analyze: 4
+  implement: 5
+  review: 6
+  local-sandbox-fix: 7

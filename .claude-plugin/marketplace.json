@@ -1,0 +1,19 @@
+{
+  "name": "CoMind-plugins",
+  "description": "ZTE-AICloud/Co-OmniSpec marketplace: ships the two Claude Code plugins (omni-dsdd and omni-reverse) that together cover Spec-Driven Development planning/implementation and code reverse engineering.",
+  "owner": {
+    "name": "ZTE-AICloud"
+  },
+  "plugins": [
+    {
+      "name": "omni-dsdd",
+      "source": "./omni-dsdd",
+      "description": "Spec-Driven Development pipeline: slash commands and shared scripts for constitution, specify, clarify, design, tasks, implement and archive. Owns the .omni-infra assets (config, memory, metamodel, templates)."
+    },
+    {
+      "name": "omni-reverse",
+      "source": "./omni-reverse",
+      "description": "Code reverse engineering toolkit: turns existing code into SDD artefacts (logic architecture, interfaces, functions, entities, scenarios, requirements, rules). Depends on omni-dsdd for shared assets via scripts/resolve-dsdd-root.{sh,py,ps1}."
+    }
+  ]
+}

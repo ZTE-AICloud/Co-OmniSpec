@@ -1,0 +1,113 @@
+{
+  "version": "1.0",
+  "description": "specify 阶段产物与 omni-infra/skills 模板的结构契约；由 specify_template_gate.py 执行校验。",
+  "template_sources": {
+    "spec": "omni-infra/templates/spec-template.md",
+    "requirements_checklist": "omni-infra/templates/requirements-template.md",
+    "context": "skills/spec-impact-analyze/templates/context-template.md",
+    "requirement_metamodel": "omni-infra/metamodel/1.requirement-template.md",
+    "scenario_metamodel": "omni-infra/metamodel/3.scenario-template.md"
+  },
+  "artifacts": {
+    "context.md": {
+      "required_headings": [
+        "功能描述",
+        "相关反构文档",
+        "架构分析与设计参考",
+        "术语对齐",
+        "约束和假设"
+      ],
+      "min_section_chars": 40,
+      "max_placeholder_sections": 4
+    },
+    "spec.md": {
+      "required_headings": [
+        "成功标准",
+        "与既有架构对齐",
+        "需求",
+        "场景"
+      ],
+      "optional_headings": ["关键实体"],
+      "required_metadata_lines": [
+        "**功能分支**:",
+        "**创建时间**:",
+        "**状态**:",
+        "**输入**:"
+      ],
+      "min_section_chars_by_heading": {
+        "需求": 80,
+        "场景": 80
+      },
+      "patterns": [
+        {
+          "id": "success_criterion",
+          "regex": "SC-\\d{3}",
+          "min_count": 1,
+          "hint": "成功标准须含 SC-001 等可衡量指标（见 spec-template.md）"
+        },
+        {
+          "id": "requirement_id",
+          "regex": "REQ-\\d{3}",
+          "min_count": 1,
+          "hint": "需求章节须含 REQ-XXX（见 specify-requirement / 1.requirement-template.md）"
+        },
+        {
+          "id": "scenario_id",
+          "regex": "SCN-\\d{3}",
+          "min_count": 1,
+          "hint": "场景章节须含 SCN-XXX（见 specify-scenario / 3.scenario-template.md）"
+        },
+        {
+          "id": "ears",
+          "regex": "系统\\s+shall",
+          "min_count": 1,
+          "hint": "需求须使用 EARS：系统 shall …"
+        },
+        {
+          "id": "requirement_action",
+          "regex": "动作类型\\s*:\\s*(INSERT|MODIFY|DELETE|REFER)",
+          "min_count": 1,
+          "hint": "需求条目须标注动作类型 INSERT/MODIFY/DELETE/REFER"
+        },
+        {
+          "id": "scenario_action",
+          "regex": "动作类型\\s*:\\s*(INSERT|MODIFY|DELETE|REFER)",
+          "min_count": 1,
+          "hint": "场景条目须标注动作类型 INSERT/MODIFY/DELETE/REFER"
+        },
+        {
+          "id": "gwt_given",
+          "regex": "\\*\\*Given\\*\\*",
+          "min_count": 1,
+          "hint": "场景验收须含 **Given**"
+        },
+        {
+          "id": "gwt_when",
+          "regex": "\\*\\*When\\*\\*",
+          "min_count": 1,
+          "hint": "场景验收须含 **When**"
+        },
+        {
+          "id": "gwt_then",
+          "regex": "\\*\\*Then\\*\\*",
+          "min_count": 1,
+          "hint": "场景验收须含 **Then**"
+        }
+      ]
+    },
+    "checklists/requirements.md": {
+      "required_headings": ["内容质量", "需求完整性", "功能准备就绪"],
+      "min_checkbox_items": 12,
+      "optional_headings": ["备注"]
+    },
+    ".runs/evaluations/eval-specify-report.yaml": {
+      "required_tokens": [
+        "report_version:",
+        "metadata:",
+        "evaluations:",
+        "stage:",
+        "overall_score"
+      ]
+    }
+  }
+}

@@ -1,0 +1,126 @@
+# 检查当前分支/目录是否已有完整反构产物
+
+<!-- 阶段1.5：检查当前分支/目录是否已有完整反构产物（避免重复执行） -->
+
+## 职责
+在准备分支和特性目录后，检查当前分支/特性目录是否已有完整的反构产物，避免重复执行浪费时间和 Token。
+
+## 前置条件
+
+- `REPO_ROOT`：仓库根目录（绝对路径，必须已获取）
+- `BRANCH_NAME`：特性分支名（由阶段1确定）
+- `FEATURE_DIR`：特性目录绝对路径（由阶段1确定）
+
+## 执行流程
+
+### 0. [ ] 创建本步骤的子任务的Todo列表
+为确保步骤执行过程的透明化和可追踪性，创建本步骤的子任务的Todo列表：
+
+1. **步骤1 检查主汇总文档是否存在**
+2. **步骤2 检查关系文件是否存在该分支/目录**
+3. **步骤3 判断结果并询问用户确认**
+
+### 1. [ ] 检查主汇总文档是否存在
+
+- **检查逻辑**：
+  - 扫描 `{REPO_ROOT}/omni-doc/on-demand/on-demand-existing-function-analysis-*.md`
+  - 优先检查 `{REPO_ROOT}/omni-doc/on-demand/on-demand-existing-function-analysis-{BRANCH_NAME}.md` 是否存在
+  - 若文件命名不匹配，再按 `FEATURE_DIR` 对应目录名进行降级匹配
+  - 如果找到匹配的主汇总文档，记录文档路径和生成时间（如有）
+
+### 2. [ ] 检查关系文件是否存在该分支/目录
+
+- **检查逻辑**：
+  - 优先读取 `{REPO_ROOT}/omni-doc/on-demand/relations/branch-function.json`（如果文件存在）
+  - 可选补充读取 `{REPO_ROOT}/omni-doc/on-demand/relations/branch-interface.json`（如果文件存在）
+  - 对分支索引条目按以下规则匹配：
+    - 若条目结构为 `{ "branch": "<BRANCH_NAME>", "targets": [...] }`，按 `branch == BRANCH_NAME` 匹配
+    - 若条目结构为 `{ "source": "<BRANCH_NAME>", "targets": [...] }`，按 `source == BRANCH_NAME` 匹配
+  - 向后兼容：若分支索引文件不存在，则尝试读取旧文件：
+    - `{REPO_ROOT}/omni-doc/on-demand/relations/requirement-function.json`
+    - `{REPO_ROOT}/omni-doc/on-demand/relations/requirement-interface.json`
+    - 旧文件仅作为弱检查（记录文件存在性，不作为强匹配依据）
+  - 如果找到匹配条目，记录关联的功能数量与接口数量（如可获取）
+
+- **最小 JSON 示例（用于实现对齐）**：
+  - `branch-function.json`（推荐结构A）：
+    ```json
+    [
+      { "branch": "rdma-sharepf-extend", "targets": ["func_a", "func_b"] }
+    ]
+    ```
+  - `branch-function.json`（兼容结构B）：
+    ```json
+    [
+      { "source": "rdma-sharepf-extend", "targets": ["func_a", "func_b"] }
+    ]
+    ```
+  - `branch-interface.json`（推荐结构A）：
+    ```json
+    [
+      { "branch": "rdma-sharepf-extend", "targets": ["api_a", "api_b"] }
+    ]
+    ```
+  - `branch-interface.json`（兼容结构B）：
+    ```json
+    [
+      { "source": "rdma-sharepf-extend", "targets": ["api_a", "api_b"] }
+    ]
+    ```
+  - 旧文件（弱检查示例）：
+    ```json
+    [
+      { "source": "TCF-123456", "targets": ["func_a", "func_b"] }
+    ]
+    ```
+
+### 3. [ ] 判断结果并询问用户确认
+
+- **判断结果**：
+  - 如果主汇总文档存在且关系文件中有对应条目（或关系文件不存在但主汇总文档存在）：
+    - 🔴 **必须向用户展示以下信息**：
+      ```
+      ⚠️  检测到当前分支/目录（{BRANCH_NAME}）已有完整的反构产物：
+      
+      - 主汇总文档：{主汇总文档路径}
+      - 关联功能数量：{功能数量}（如果关系文件存在）
+      - 关联接口数量：{接口数量}（如果关系文件存在）
+      - 文档生成时间：{时间戳}（如果可获取）
+      
+      继续执行将重新分析当前分支/目录，可能会覆盖或更新现有产物。
+      ```
+    - 🔴 **必须询问用户是否继续执行**：
+      - 提示格式："当前分支/目录已有完整反构产物，是否继续执行（强制重跑）？[Y/n]"
+      - 选项说明：
+        - 输入 "y"、"yes" 或回车：继续执行后续步骤（强制重跑）
+        - 输入 "n" 或 "no"：终止流程，不继续执行
+      - 🔴 **强制要求**：必须等待用户明确响应，不得自动继续
+      - 如果用户选择 "n" 或 "no"：输出提示"已取消执行，保留现有反构产物"，**立即终止流程**，不继续执行后续步骤（包括阶段2、阶段3a/3b）
+      - 如果用户选择 "y"、"yes" 或回车：继续执行后续步骤
+  - 如果主汇总文档不存在或关系文件中无对应条目：
+    - 继续执行后续步骤（正常流程）
+
+## 容错处理
+
+- 如果 `BRANCH_NAME` 或 `FEATURE_DIR` 为空：跳过此检查，继续执行后续步骤（记录 warning）
+- 如果 `REPO_ROOT` 无法确定：跳过此检查，继续执行后续步骤（记录 warning）
+- 如果关系文件不存在或无法读取：仅检查主汇总文档，不影响判断逻辑
+
+## 输出
+
+- 无直接输出变量（通过用户确认决定是否继续流程）
+- 如果用户选择继续：流程继续执行
+- 如果用户选择取消：流程终止
+
+## 注意事项
+
+- **🔴 重要**：本步骤必须在分支管理流程完成后执行（需要 `REPO_ROOT`、`BRANCH_NAME` 和 `FEATURE_DIR`）
+- **🔴 重要**：必须等待用户明确响应，不得自动继续
+- **🔴 重要**：AI Agent 在执行所有步骤时，必须使用中文进行说明和输出
+
+## 相关文档
+
+- 阶段2（架构识别）：[02-deep-architecture-identification.md](./02-deep-architecture-identification.md)
+- 阶段3a（简单需求反构）：[03a-simple-on-demand-reverse.md](./03a-simple-on-demand-reverse.md)
+- 阶段3b（复杂需求反构）：[03b-complex-on-demand-reverse.md](./03b-complex-on-demand-reverse.md)
+

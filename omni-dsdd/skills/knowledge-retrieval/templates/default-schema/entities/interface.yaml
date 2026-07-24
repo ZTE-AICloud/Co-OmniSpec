@@ -1,0 +1,103 @@
+type_id: interface
+cardinality: multi
+desc: "系统内部接口，由某个逻辑实体暴露，供其他实体或外部调用。"
+id_pattern: "^API-\\d{3}$"
+file_pattern: "API-*.md"
+instance_format: markdown-with-frontmatter
+
+attributes:
+  - name: 标识
+    key: id
+    location: meta
+    role: identifier
+    content_type: scalar
+    required: true
+    searchable: keyword
+    desc: "接口唯一标识，形如 API-001。全局统一使用连字符。"
+
+  - name: 名称
+    key: name
+    location: meta
+    role: display_name
+    content_type: scalar
+    required: true
+    searchable: keyword
+    desc: "接口名称，建议与文件名后缀一致。"
+
+  - name: 源文件
+    key: file
+    location: meta
+    content_type: scalar
+    required: true
+    searchable: keyword
+    desc: "接口所在源文件路径（相对仓库根），用于定位代码实现位置。"
+
+  - name: 入口标识
+    key: identifier
+    location: meta
+    role: none
+    content_type: scalar
+    required: true
+    searchable: keyword
+    desc: "接口入口的运行时标识，如消息号、RESTful 路径、回调函数名、事件标识等。"
+
+  - name: 简述
+    key: brief
+    location: meta
+    role: brief
+    content_type: scalar
+    required: true
+    searchable: vector
+    desc: "一句话概括接口的核心功能与用途。"
+
+  - name: 描述
+    key: description
+    location: meta
+    role: description
+    content_type: scalar
+    required: false
+    searchable: vector
+    desc: "接口的业务用途、调用场景、处理逻辑的中等粒度说明。"
+
+  - name: 概述
+    location: body
+    content_type: prose
+    required: true
+    searchable: vector
+    desc: "接口的详细描述。"
+
+  - name: 接口定义
+    location: body
+    content_type: code
+    required: true
+    searchable: keyword
+    desc: "函数签名或接口定义代码块。"
+
+  - name: 接口说明
+    location: body
+    content_type: prose
+    required: true
+    searchable: vector
+    desc: "接口的功能描述、调用场景、输入参数、返回值、处理流程的组合说明。"
+
+  - name: 代码映射
+    location: body
+    content_type: prose
+    required: false
+    searchable: keyword
+    desc: "接口定义与实现分离时，说明实现函数名、文件位置、调用关系。"
+
+  - name: 关联关系
+    location: body
+    content_type: plantuml
+    required: false
+    searchable: false
+    indexable: false
+    desc: "PlantUML 时序图，描述接口与调用者/相关实体的协作关系。"
+
+  - name: 异常处理
+    location: body
+    content_type: list
+    required: false
+    searchable: vector
+    desc: "异常情况与处理方式。"

@@ -1,0 +1,34 @@
+You will be provided with a problem statement, a code snippet that supposedly addresses the problem, a reference solution, and a catalog of code inconsistencies.
+
+Evaluation Steps:
+1. Read the problem statement and reference solution carefully and identify the required functionalities for the implementation. The reference solution is used to help you understand the problem, do not directly compare the code snippet to the reference code.
+2. Read the code snippet and compare it to the problem statement. Check if the code snippet covers the required functionalities.
+3. Output your answer in a JSON format list.
+    a) If the code snippet is correct, output: [{"inconsistency": "None", "severity": "Negligible"}].
+    b) If the code snippet is incorrect, output the identified inconsistencies and their severity according to the catalog of code inconsistencies. For example: [{"inconsistency": "<inconsistency1>", "severity": "<severity1>"}, {"inconsistency": "<inconsistency2>", "severity": "<severity2>"}, ...]
+
+Problem:
+{{PROBLEM}}
+
+Reference:
+{{CODE2}}
+
+Code Snippet:
+{{CODE1}}
+
+Catalog of Code Inconsistencies:
+0. Using different methods or algorithms to solve the problem: Negligible
+1. Missing dependency declarations that are used in the program: Negligible
+2. No exception handling for unexpected events, such as invalid inputs: Negligible
+3. Including inefficient or unnecessary statements: Negligible
+4. Failing to handle corner cases: Small
+5. Logical errors leading to incorrect outputs: Major
+6. Syntax errors or compilation errors: Fatal
+7. Logic not implemented, only placeholders present: Fatal
+8. Timeout errors or continuous program execution without termination: Fatal
+9. Referencing undefined variables or functions: Fatal
+10. Other mistakes: Small
+
+Evaluation Form:
+JSON output (a JSON list only):`
+

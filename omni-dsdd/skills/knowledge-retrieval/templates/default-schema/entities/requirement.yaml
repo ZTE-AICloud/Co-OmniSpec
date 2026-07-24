@@ -1,0 +1,59 @@
+type_id: requirement
+cardinality: multi
+desc: "软件需求，采用 EARS（Easy Approach to Requirements Syntax）格式表达功能/非功能诉求。"
+id_pattern: "^REQ-\\d{3}$"
+file_pattern: "REQ-*.md"
+instance_format: markdown-with-frontmatter
+
+attributes:
+  - name: 标识
+    key: id
+    location: meta
+    role: identifier
+    content_type: scalar
+    required: true
+    searchable: keyword
+    desc: "需求唯一标识，形如 REQ-001，与文件名中数字部分一致。"
+
+  - name: 名称
+    key: name
+    location: meta
+    role: display_name
+    content_type: scalar
+    required: true
+    searchable: keyword
+    desc: "需求名称，简洁描述需求的功能点。"
+
+  - name: 需求类型
+    key: type
+    location: meta
+    content_type: enum
+    enum: [Functional, Non-Functional]
+    required: true
+    searchable: keyword
+    desc: "需求类型。Functional=功能需求，Non-Functional=非功能需求（性能/可靠性/安全性等质量属性）。"
+
+  - name: 简述
+    key: brief
+    location: meta
+    role: brief
+    content_type: scalar
+    required: true
+    searchable: vector
+    desc: "一句话概括需求目的与范围，用于列表卡片与语义召回首选字段。"
+
+  - name: 描述
+    key: description
+    location: meta
+    role: description
+    content_type: scalar
+    required: false
+    searchable: vector
+    desc: "需求的中等粒度描述，补充简述无法涵盖的业务背景与边界。"
+
+  - name: 需求陈述
+    location: body
+    content_type: prose
+    required: true
+    searchable: vector
+    desc: "EARS 格式的需求陈述，使用 When/While/If/Where 等关键字描述触发条件与系统行为。"

@@ -1,0 +1,186 @@
+# 场景识别规则配置
+# 版本: 1.0
+# 说明: 用户可配置的场景识别规则，用于指导 AI 识别场景类型
+# 位置: 此文件位于 .cache/user_input/scenario-identification-rules.yaml，根据项目需求修改
+
+version: "1.0"
+description: "场景识别规则配置（用户可配置）"
+
+# ============================================
+# 支持的场景类型清单
+# ============================================
+# 以下列出了所有支持的场景类型，您可以根据项目需求选择要反构的场景类型
+# 如果配置文件中只包含"正向主流程"类型，则只会识别和生成正向主流程类型的场景，其他类型将被忽略
+#
+# 支持的场景类型：
+#   - 正向主流程: 正常业务流程，用户正常操作路径
+#   - 异常场景: 错误处理、异常情况、失败流程
+#   - 边界场景: 边界条件、极限值、临界情况
+#   - 批处理场景: 批量处理、定时任务、后台作业
+#   - 集成场景: 系统集成、外部服务调用、第三方接口交互
+#   - 工作流场景: 多步骤流程、状态机、审批流程
+#   - 数据转换场景: 数据格式转换、数据映射、ETL流程
+#   - 查询检索场景: 搜索、过滤、排序、分页
+#   - 事务处理场景: 事务管理、数据一致性保证
+#   - 其他类型场景: 无法明确分类的场景
+#
+# 配置说明：
+#   1. 在 scenario_types 下只配置您需要反构的场景类型
+#   2. 如果只配置"正向主流程"类型，则只会识别和生成正向主流程类型的场景
+#   3. 所有字段都是可选的，您可以根据需要选择性地配置部分内容
+#   4. 如果提供了 scenario_patterns 或 few_shot_examples，将直接使用，跳过AI自动识别
+#
+# 配置方式（两种方式可任选其一或混合使用）：
+#   - 方式1（推荐）：使用 simple_config 简化配置，用自然语言描述场景特点，AI自动转换
+#   - 方式2：使用详细配置（scenario_patterns、few_shot_examples等），直接提供结构化数据
+#   优先级：详细配置 > 简化配置 > AI自动识别
+# ============================================
+
+# ============================================
+# 方式1：简化配置（推荐，使用自然语言描述）
+# ============================================
+# 如果您不熟悉技术细节，可以使用自然语言简单描述场景特点
+# AI Agent会自动将您的描述转换为结构化的规则和约束
+# 这种方式更简单直观，适合大多数用户
+
+simple_config:
+  # 场景类型列表（必需）
+  scenario_types:
+    - "正向主流程"
+    - "异常场景"
+    # - "边界场景"
+    # - "批处理场景"
+  
+  # 场景特点描述（自然语言，AI自动转换为场景模式特征）
+  # 只需简单描述场景的业务流程和特点，AI会自动提取代码模式、关键特征等
+  scenario_descriptions:
+    - type: "正向主流程"
+      description: "用户登录流程：用户输入用户名和密码，系统验证后创建会话"
+      business_domain: "用户管理"
+      # 可选：补充说明关键步骤或特征
+      notes: "包含用户名密码验证、会话创建等步骤"
+    
+    - type: "异常场景"
+      description: "处理登录失败、用户不存在、密码错误等异常情况"
+      business_domain: "用户管理"
+      # 可选：补充说明异常处理方式
+      notes: "使用try-except捕获异常，返回错误信息"
+  
+  # 约束描述（自然语言，AI自动转换为约束规则）
+  # 只需简单描述识别范围、排除条件等，AI会自动提取文件路径模式、关键字等
+  constraint_descriptions:
+    - "只识别用户管理模块的场景，排除测试文件"
+    - "重点关注包含login、register、authenticate关键字的场景"
+    # 可以添加更多约束描述
+    # - "只扫描src目录下的Python文件"
+    # - "排除vendor和node_modules目录"
+
+# ============================================
+# 方式2：详细配置（高级用户，直接提供结构化数据）
+# ============================================
+# 如果您熟悉技术细节，可以直接提供结构化的配置
+# 这种方式更精确，适合需要精确控制的场景
+# 注意：如果同时提供了详细配置和简化配置，优先使用详细配置
+
+# 场景类型列表（可选，如果 simple_config 中已提供则不需要）
+# scenario_types:
+#   - "正向主流程"
+#   - "异常场景"
+
+# 场景类型列表（可选，如果提供则跳过交互式选择）
+# 如果不提供，将使用交互式向导让用户选择
+scenario_types:
+  - "正向主流程"
+  - "异常场景"
+  # - "边界场景"
+  # - "批处理场景"
+  # - "集成场景"
+  # - "工作流场景"
+
+# 场景模式特征（可选，如果 simple_config 中已提供场景描述则不需要）
+# 如果不提供，AI将根据 simple_config.scenario_descriptions 自动转换，或自动识别场景模式特征
+scenario_patterns:
+  - pattern_name: "用户登录流程"
+    pattern_type: "正向主流程"
+    description: "用户通过用户名密码登录系统的流程"
+    code_patterns:
+      - "def login(username, password)"
+      - "authenticate_user"
+      - "create_session"
+    business_domain: "用户管理"
+    key_features:
+      - "用户名密码验证"
+      - "会话创建"
+  
+  - pattern_name: "异常处理模式"
+    pattern_type: "异常场景"
+    description: "处理业务异常的标准模式"
+    code_patterns:
+      - "try-except"
+      - "raise Exception"
+      - "error_handler"
+    business_domain: "通用"
+    key_features:
+      - "异常捕获"
+      - "错误处理"
+
+# Few-shot示例（可选，如果 simple_config 中已提供场景描述则不需要）
+# 如果不提供，AI将基于转换后的场景模式特征自动生成Few-shot示例
+few_shot_examples:
+  - scenario_name: "用户登录场景"
+    scenario_type: "正向主流程"
+    business_domain: "用户管理"
+    code_snippet: |
+      def login(username, password):
+          user = authenticate_user(username, password)
+          if user:
+              return create_session(user)
+          else:
+              raise AuthenticationError("用户名或密码错误")
+    key_features:
+      - "用户名密码验证"
+      - "会话创建"
+    description: "用户输入用户名和密码，系统验证后创建会话"
+    entry_points:
+      - "login"
+      - "authenticate_user"
+  
+  - scenario_name: "用户注册场景"
+    scenario_type: "正向主流程"
+    business_domain: "用户管理"
+    code_snippet: |
+      def register(username, email, password):
+          if user_exists(username):
+              raise UserExistsError("用户已存在")
+          user = create_user(username, email, password)
+          send_verification_email(user)
+          return user
+    key_features:
+      - "用户创建"
+      - "邮箱验证"
+    description: "新用户注册，创建账户并发送验证邮件"
+    entry_points:
+      - "register"
+      - "create_user"
+
+# 约束规则（可选，如果 simple_config 中已提供约束描述则不需要）
+# 如果不提供，AI将根据 simple_config.constraint_descriptions 自动转换，或使用交互式向导配置
+constraints:
+  - description: "只识别用户管理模块的场景"
+    scope: "user_management"
+    include_patterns:
+      - "**/user/**/*.py"
+      - "**/auth/**/*.py"
+  
+  - description: "排除测试文件"
+    exclude_patterns:
+      - "**/test_*.py"
+      - "**/*_test.py"
+      - "**/tests/**/*.py"
+  
+  - description: "只识别包含特定关键字的场景"
+    include_keywords:
+      - "login"
+      - "register"
+      - "authenticate"
+

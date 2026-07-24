@@ -1,0 +1,57 @@
+type_id: scenario
+cardinality: multi
+desc: "业务场景，描述特定上下文下的交互流程与验收标准，用于验证需求。"
+id_pattern: "^SCN-\\d{3}$"
+file_pattern: "SCN-*.md"
+instance_format: markdown-with-frontmatter
+
+attributes:
+  - name: 标识
+    key: id
+    location: meta
+    role: identifier
+    content_type: scalar
+    required: true
+    searchable: keyword
+    desc: "场景唯一标识，形如 SCN-001。"
+
+  - name: 名称
+    key: name
+    location: meta
+    role: display_name
+    content_type: scalar
+    required: true
+    searchable: keyword
+    desc: "场景名称。"
+
+  - name: 简述
+    key: brief
+    location: meta
+    role: brief
+    content_type: scalar
+    required: true
+    searchable: vector
+    desc: "一句话概括场景核心内容与目的。"
+
+  - name: 描述
+    key: description
+    location: meta
+    role: description
+    content_type: scalar
+    required: false
+    searchable: vector
+    desc: "场景的业务背景、触发条件、主要参与者与预期结果。"
+
+  - name: 概述
+    location: body
+    content_type: prose
+    required: true
+    searchable: vector
+    desc: "场景的详细叙述，补充 frontmatter 简/描述未覆盖的业务上下文。"
+
+  - name: 验收场景
+    location: body
+    content_type: list
+    required: true
+    searchable: vector
+    desc: "Given/When/Then 形式的可验收条款，每条独立成行，供测试用例派生与需求回溯。"

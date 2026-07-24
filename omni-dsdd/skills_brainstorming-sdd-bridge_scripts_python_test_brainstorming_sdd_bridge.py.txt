@@ -1,0 +1,60 @@
+{"status": "ok", "paths": "/tmp/tmpkdomd9oq/workspace/changes/999-bridge/.runs/paths.json"}
+{"status": "ok", "output": "/tmp/tmpkdomd9oq/workspace/changes/999-bridge/checklists/requirements.md"}
+{
+  "feature_dir": "/tmp/tmpkdomd9oq/workspace/changes/999-bridge",
+  "step": "1",
+  "gate_exit": 0,
+  "errors": [],
+  "artifact": ".runs/paths.json",
+  "template_contract": "1.0"
+}
+{
+  "feature_dir": "/tmp/tmpkdomd9oq/workspace/changes/999-bridge",
+  "step": "3",
+  "gate_exit": 0,
+  "errors": [],
+  "artifact": "context.md",
+  "template_contract": "1.0"
+}
+{
+  "feature_dir": "/tmp/tmpkdomd9oq/workspace/changes/999-bridge",
+  "step": "6",
+  "gate_exit": 0,
+  "errors": [],
+  "artifact": "spec.md",
+  "template_contract": "1.0"
+}
+{
+  "feature_dir": "/tmp/tmpkdomd9oq/workspace/changes/999-bridge",
+  "step": "8",
+  "gate_exit": 0,
+  "errors": [],
+  "artifact": "checklists/requirements.md",
+  "template_contract": "1.0"
+}
+{
+  "feature_dir": "/tmp/tmpkdomd9oq/workspace/changes/999-bridge",
+  "step": "9",
+  "gate_exit": 0,
+  "errors": [],
+  "artifact": ".runs/evaluations/eval-specify-report.yaml",
+  "template_contract": "1.0"
+}
+{
+  "feature_dir": "/tmp/tmpkdomd9oq/workspace/changes/999-bridge",
+  "step": "11",
+  "gate_exit": 0,
+  "errors": [],
+  "artifact": ".runs/metrics/omni-metrics-log.json",
+  "template_contract": "1.0"
+}
+[gate-guard] stage 'brainstorming-sdd-bridge' 非阻断（blocking=false），放行
+{"status": "ok", "state": {"flow_mode": "expert", "current_stage": "tasks", "completed_stages": ["brainstorming-sdd-bridge"], "last_updated": "2026-07-24T10:43:14Z", "arguments": ""}, "progress_file": "/tmp/tmpkdomd9oq/workspace/changes/999-bridge/.runs/workflow-progress.md"}
+{"status": "ok", "feature_dir": "/tmp/tmpkdomd9oq/workspace/changes/999-bridge", "source_design": "/tmp/tmpkdomd9oq/workspace/changes/999-bridge/2026-07-03-bridge-design.md", "spec": "/tmp/tmpkdomd9oq/workspace/changes/999-bridge/spec.md", "design": "/tmp/tmpkdomd9oq/workspace/changes/999-bridge/design.md", "context": "/tmp/tmpkdomd9oq/workspace/changes/999-bridge/context.md"}
+{
+  "feature_dir": "/tmp/tmpkdomd9oq/workspace/changes/999-bridge",
+  "step": "context",
+  "gate_exit": 0,
+  "errors": [],
+  "artifact": "context.md"
+}

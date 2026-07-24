@@ -1,0 +1,63 @@
+# _meta.yaml — 知识结构的全局元规范（Meta-Schema 的项目级配置入口）
+# 本文件只声明"对 Schema 本身的约束"，不涉及具体领域类型。
+# Skill 启动时首先加载本文件，再用它去解释 entities/*.yaml 和 relations/ontology.yaml。
+
+version: 1
+# Meta-Schema 的版本号。未来字段语义演进时用它做兼容判断；首版固定为 1。
+
+id:
+  separator: "-"
+  # 实例 ID 中"类型段"与"序号段"之间的分隔符，全局统一为 "-"。
+  # 禁用下划线作为该分隔符（因此老的 API_001 被规范为 API-001）。
+
+  pattern: "^[A-Z][A-Z_]*-\\d{3,}$"
+  # 实例 ID 的正则约束。TYPE 段允许内部使用下划线（如 EXTERNAL_API），
+  # 但 TYPE 与序号之间必须是 "-"。序号至少三位，允许扩展到更多位。
+
+# 正文解析策略
+body:
+  attribute_heading_level: 2
+  # body 中"属性边界"固定用 H2 标题。H3/H4 为属性内部自由使用。
+
+  allow_leading_h1_title: true
+  # 允许文件正文第一行为 H1 展示标题（如 "# 功能：FUNC-001-XXX"），Parser 跳过不当属性。
+
+  strip_heading_suffixes:
+    - "（可选）"
+    - "(可选)"
+  # H2 规范化时剥离的后缀。模板里 "## 异常流程（可选）" 在实例里应写成 "## 异常流程"，
+  # 但容忍历史数据里带尾缀。
+
+naming:
+  primary_language: zh
+  # 属性的权威名使用中文（name 字段）。
+  # 对外暴露的原语优先按中文 name 匹配，key 作为字面兜底。
+
+roles:
+  # 受限词表：属性可承担的语义角色。检索器按 role 做跨类型的统一处理。
+  - identifier      # 实例的主键（通常为 frontmatter.id）
+  - display_name    # 人读的名称
+  - brief           # 一句话卡片（用于列表和向量召回首选字段）
+  - description     # 中等粒度的结构化摘要
+  - directory_ref   # 指向代码目录的字符串（用于未来代码符号检索器）
+  - none            # 无特殊语义
+
+content_types:
+  # 受限词表：属性的内容类型。用于后续向量化/切片策略选择。
+  - prose           # 普通叙述
+  - list            # 无序/有序/GWT 条目
+  - table           # markdown 表格
+  - code            # 代码块
+  - plantuml        # PlantUML 代码块（可在此类属性上启用 extract_refs）
+  - enum            # 枚举取值（通常在 meta）
+  - scalar          # 简短标量值（通常在 meta）
+
+searchable_values:
+  # 受限词表：属性的可检索性。
+  - keyword
+  - vector
+  - both
+  - false
+
+relations_ontology: ./relations-ontology.yaml
+# 关系类型本体文件路径，填写相对路径，相对于'knowledge-schema'的路径。写入关系时若 relation 不在本体，则登记到 pending-relations.yaml。

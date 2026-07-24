@@ -1,0 +1,8 @@
+# Runtime state (not part of the skill itself)
+.omc/
+.claude/
+
+# Editor / OS
+.DS_Store
+*.swp
+*.swo

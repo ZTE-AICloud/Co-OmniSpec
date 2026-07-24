@@ -1,0 +1,54 @@
+{
+  "skill": "local-sandbox-fix",
+  "version": "1.2.0",
+  "agent_policy": {
+    "code_review_invocation": "Skill(\"code-review\")",
+    "working_dir_source": "CLAUDE_WORKING_DIR",
+    "workflow_stage": "local-sandbox-fix",
+    "workflow_status_file": "FEATURE_DIR/.runs/local-sandbox-fix-status.json",
+    "workflow_gate_script": "skills/local-sandbox-fix/scripts/bash/local-sandbox-fix-workflow-gate.sh",
+    "forbidden": [
+      "manual_tail_run_log",
+      "skip_gate_on_fix",
+      "delete_files_to_pass_ci",
+      "git_rev_parse_for_working_dir"
+    ]
+  },
+  "gate_steps": [
+    "0-init",
+    "2-start-ci",
+    "3-wait-ci",
+    "4-parse-result",
+    "5-fix-verify",
+    "6-code-review-gate",
+    "7-record-iteration"
+  ],
+  "steps": {
+    "3-wait-ci": {
+      "executor": "wait_sandboxcheck.py",
+      "blocking": true,
+      "stale_timeout_sec": 120,
+      "global_timeout_sec": 5400,
+      "poll_interval_sec": 5,
+      "done_markers": [
+        "==================本地沙盒检查完成=================",
+        "**本地沙盒检查最终结果如下**"
+      ]
+    },
+    "4-parse-result": {
+      "success_code": 200,
+      "outputs": ["fix-context.json"]
+    },
+    "6-code-review-gate": {
+      "artifacts_any": [
+        "FEATURE_DIR/code-review.md",
+        "FEATURE_DIR/.runs/evaluations/code-review-summary.json",
+        "CLAUDE_WORKING_DIR/.runs/evaluations/code-review-summary.json"
+      ],
+      "mtime_after": "fix_started_at"
+    }
+  },
+  "loop": {
+    "max_iterations": 3
+  }
+}

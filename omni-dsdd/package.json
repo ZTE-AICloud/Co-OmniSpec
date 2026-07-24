@@ -1,0 +1,19 @@
+{
+  "name": "@omni-dsdd/monorepo",
+  "version": "3.1.0",
+  "description": "OmniSpec DSDD 插件集 Monorepo",
+  "private": true,
+  "workspaces": [
+    "skills/*"
+  ],
+  "scripts": {
+    "validate": "node scripts/validate-skills.js",
+    "list": "node scripts/list-skills.js",
+    "build:docs": "node scripts/build-docs.js"
+  },
+  "keywords": ["omnispec", "sdd", "monorepo", "claude-code"],
+  "author": {
+    "name": "ZTE-AICloud"
+  },
+  "license": "MIT"
+}

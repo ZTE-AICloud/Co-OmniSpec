@@ -1,0 +1,65 @@
+version: 1
+
+relations:
+  - name: verifies
+    from_types: [scenario]
+    to_types: [requirement]
+    directional: true
+    group: traceability
+    desc: "场景验证需求；反向查询可获得需求被哪些场景覆盖。"
+
+  - name: satisfies
+    from_types: [function]
+    to_types: [requirement]
+    directional: true
+    group: traceability
+    desc: "功能满足需求；反向查询可定位需求被哪些功能实现。"
+
+  - name: realized_by
+    from_types: [function]
+    to_types: [entity]
+    directional: true
+    group: implementation
+    desc: "功能由逻辑实体协同实现（多对多）。"
+
+  - name: exposes
+    from_types: [entity]
+    to_types: [interface]
+    directional: true
+    group: structural
+    desc: "逻辑实体暴露接口。"
+
+  - name: invokes
+    from_types: [function, entity]
+    to_types: [interface, external_interface]
+    directional: true
+    group: behavioral
+    desc: "功能或实体调用接口（含外部接口）。"
+
+  - name: depends_on
+    from_types: [entity]
+    to_types: [entity]
+    directional: true
+    group: structural
+    desc: "实体间的依赖关系。"
+
+  - name: interacts_with
+    from_types: [context]
+    to_types: [context]
+    directional: false
+    group: structural
+    desc: "系统与外部系统之间的交互关系（单例间的抽象边）。一般从 context 图中派生。"
+
+  - name: contains
+    from_types: [logic_architecture]
+    to_types: [entity]
+    directional: true
+    group: structural
+    desc: "逻辑架构包含某逻辑实体。一般从 logic_architecture 图中派生。"
+
+  - name: triggered_by
+    from_types: [function]
+    to_types: [scenario]
+    directional: true
+    group: behavioral
+    desc: "功能在某个场景下被触发。"

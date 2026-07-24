@@ -1,0 +1,31 @@
+cache_dir: .knowledge-cache
+knowledge_model:
+  enabled: false
+  instances_dir: ./instances
+  schema_dir: ./model
+raw_knowledge_dir: .
+retrievers:
+  graph:
+    enabled: true
+    graph_path: 
+  metadata:
+    enabled: true
+  section:
+    enabled: true
+  vector:
+    baseline:
+      chunk_overlap: 64
+      chunk_size: 512
+      min_chunk_len: 10
+    batch_size: 64
+    device: cpu
+    enabled: true
+    enhance:
+      exclude_content_types:
+      - code
+      - enum
+      - scalar
+      min_text_length: 4
+    min_score: 0.3
+    model: BAAI/bge-base-zh-v1.5
+    top_k_default: 8

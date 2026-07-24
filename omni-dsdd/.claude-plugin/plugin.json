@@ -1,0 +1,11 @@
+{
+  "name": "omni-dsdd",
+  "version": "v3.1.4",
+  "description": "面向规范驱动开发（DSDD）的Harness工程解决方案插件包，覆盖按需求反构、规约制定、需求分析、方案设计、任务拆解、实施与归档全流程，通过多种工作流引导AI编程助手高效交付高质量软件。",
+  "homepage": "https://github.com/ZTE-AICloud/Co-OmniSpec",
+  "author": {
+	"name": "ZTE-AICloud"
+  },
+  "license": "MIT",
+  "keywords": ["SDD", "Harness engineer"]
+}

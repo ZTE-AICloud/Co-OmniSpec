@@ -1,0 +1,61 @@
+"""\
+You will be given the code snippet for a problem.  
+Your task is to rate the code snippet only on one metric.  
+Please make sure you read and understand these instructions carefully.  
+Please keep this document open while reviewing, and refer to it as needed.
+
+Evaluation Criteria:  
+Usefulness (0-4) - Usefulness of the code snippet based on the problem description and the comparison with the reference code.
+- A score of 0: Snippet is not at all helpful; it is irrelevant to the problem.
+- A score of 1: Snippet is slightly helpful; it contains information relevant to the problem, but it is easier to write the solution from scratch.
+- A score of 2: Snippet is somewhat helpful; it requires significant changes (compared to the size of the snippet), but is still useful.
+- A score of 3: Snippet is helpful, but needs to be slightly changed to solve the problem.
+- A score of 4: Snippet is very helpful; it solves the problem.
+
+Evaluation Steps:
+1. Read the problem carefully and identify required functionalities of the implementation.
+2. Read the code snippet and compare it to the problem and reference code. Check if the code snippet covers all required functionalities of the problem, and if it presents them in a clear and logical order.
+3. Assign a score for usefulness on a scale of 0 to 4, where 0 is the lowest and 4 is the highest based on the Evaluation Criteria.
+4. Provide a detailed justification for your score in a structured JSON format as described below.
+
+Problem:
+
+{{PROBLEM}}
+
+Reference Code:
+
+{{REFERENCE}}
+
+Code Snippet:
+
+{{OUTPUT}}
+
+Evaluation Form:
+Please output your evaluation in JSON format with the following two fields:
+- "score": an integer between 0 and 4.
+- "justification": a JSON object containing detailed analysis. The object must include the following fields:
+    * "summary": a brief overall assessment of usefulness (string).
+    * "relevance": how relevant the snippet is to the problem (string).
+    * "required_changes": description of the changes needed to make it fully solve the problem (string).
+    * "clarity": comments on the code's clarity and logical order (string).
+    * "comparison_with_reference": how the snippet compares to the reference code in terms of usefulness (string).
+    * "strengths": list of positive aspects that contribute to its usefulness (list of strings).
+    * "weaknesses": list of aspects that reduce its usefulness (list of strings). If none, use an empty list.
+
+Example output:
+{
+  "score": 3,
+  "justification": {
+    "summary": "The snippet implements the core logic but lacks input validation and comments, making it slightly less useful.",
+    "relevance": "Directly addresses the problem's main requirement.",
+    "required_changes": "Add input validation and improve variable naming.",
+    "clarity": "The logic is reasonably clear, but missing comments make it harder to follow.",
+    "comparison_with_reference": "The reference code includes comprehensive error handling and documentation, which the snippet lacks.",
+    "strengths": ["Correct main algorithm", "Concise implementation"],
+    "weaknesses": ["No input validation", "Poor variable naming", "Lacks comments"]
+  }
+}
+
+Make sure your output is a valid JSON object and contains no additional text.
+"""
+

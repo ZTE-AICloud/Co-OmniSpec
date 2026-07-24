@@ -1,0 +1,14 @@
+# OmniSpec 配置文件
+# 此文件在安装时会被复制到目标项目的 .omni-infra/config
+# 用户可以根据项目需要修改配置值
+
+# 文档目录配置
+# 指定项目文档的根目录，默认为 "omni-doc"
+# 可以通过环境变量 SPECIFY_DOC_DIR 覆盖此配置
+# 示例: DOC_DIR=doc 或 DOC_DIR=documentation
+DOC_DIR=omni-doc
+
+# 其他配置项可以在这里添加
+# 例如:
+# OTHER_CONFIG=value
+

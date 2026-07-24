@@ -1,0 +1,24 @@
+output
+release
+.specstory
+.vscode
+.cursorindexingignore
+
+# Build 产物（版本包）
+build/*.zip
+build/*/
+build/*.zip
+build/*-*-*/
+
+# SDD 运行时特性指针（由 specify/design finalize 写入）
+changes/.active-feature
+# create-branch harness 待创建幂等缓存
+changes/.branch-naming-pending.json
+
+skills/local-sandboxcheck/execution_outputs/git_summary.txt
+skills/local-sandboxcheck/execution_outputs/result.json
+skills/local-sandboxcheck/execution_outputs/run.log
+
+# Python 过程文件
+*.pyc
+**/__pycache__/

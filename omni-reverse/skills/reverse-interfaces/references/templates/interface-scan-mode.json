@@ -1,0 +1,5 @@
+{
+  "mode": "A",
+  "allow_mode_downgrade": true,
+  "_comment": "mode可选值: A=原有接口清单扫描(架构+Few-shot+分批), B=reverse调用链扫描. allow_mode_downgrade可选值: true=当B不支持/失败时自动回退A, false=当B不支持/失败时直接报错退出. 复制本文件为 interface-scan-mode.json 可预选方式，无需交互确认."
+}

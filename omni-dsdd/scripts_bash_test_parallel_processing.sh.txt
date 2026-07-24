@@ -1,0 +1,28 @@
+开始测试并行处理脚本...
+已创建测试环境: /tmp/omnispec_test_jiOWYA
+测试 get-next-batches.sh 脚本...
+获取到 2 个批次:
+  批次 1: pending
+  批次 2: pending
+✅ 获取批次测试通过
+
+测试 update-batches-status.sh 脚本...
+更新结果: {
+  "success": 2,
+  "failed": 0,
+  "details": [
+  {
+    "batch_number": 1,
+    "status": "processing",
+    "success": true
+  },
+  {
+    "batch_number": 2,
+    "status": "processing",
+    "success": true
+  }
+]
+}
+✅ 批次状态更新测试通过
+
+🎉 所有测试通过!

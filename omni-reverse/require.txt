@@ -1,0 +1,151 @@
+# ════════════════════════════════════════════════════════════════
+# omni-reverse 对 omni-dsdd 的运行时依赖清单
+# ════════════════════════════════════════════════════════════════
+#
+# 说明
+# ----
+# omni-reverse 不内嵌共享脚本与 omni-infra，运行时依赖同 marketplace 下的 omni-dsdd
+# 提供。所有访问经 omni-reverse/scripts/resolve-dsdd-root.{sh,py,ps1} 解析出
+# DSDD（= omni-dsdd 安装根）后拼路径：
+#
+#   DSDD="$(bash "${CLAUDE_PLUGIN_ROOT}/scripts/resolve-dsdd-root.sh")" || exit 1
+#
+# - 脚本类（scripts/）：直接经 ${DSDD}/scripts/... 调用。
+# - omni-infra 类：由 ${DSDD}/scripts/bash/init_omni_infra.sh 整体拷贝到代码工程
+#   ${CLAUDE_WORKING_DIR}/.omni-infra，之后以 $REPO_ROOT/.omni-infra/... 访问。
+#
+# 标注
+# ----
+# [OK]        = 已在 omni-dsdd 中确认存在，可用。
+# [OK→SKILL]  = 原缺失（文档引用但 omni-dsdd 无），已在 omni-reverse 归属 skill 的
+#               scripts/ 内实现自包含（见下文注明路径），文档引用同步改为 skill 内路径。
+# [MISS]      = 文档引用但 omni-dsdd 中不存在（既有文档缺陷，与 omni-reverse 抽取无关），
+#               实际运行到对应 skill 时会失败，需另修。
+#
+# 本清单由代码扫描自动核验生成，更新依赖时请同步本文件。
+# ════════════════════════════════════════════════════════════════
+
+
+# ────────────────────────────────────────────────────────────────
+# 1. 共享脚本（scripts/）—— 经 ${DSDD}/scripts/... 调用
+# ────────────────────────────────────────────────────────────────
+
+# 1.1 Bash
+[OK]   scripts/bash/check-interactive-mode.sh
+[OK]   scripts/bash/generate-scenario-batches.sh
+[OK]   scripts/bash/get-next-batch.sh
+[OK]   scripts/bash/get-next-batches.sh
+[OK]   scripts/bash/init_omni_infra.sh                            # omni-infra 初始化入口
+[OK]   scripts/bash/update-batches-status.sh
+[OK]   scripts/bash/verify-batches-completion.sh
+[OK]   scripts/bash/reverse/index/build-on-demand-index.sh
+[OK]   scripts/bash/reverse/interfaces/utils/create_interface_batches.sh
+[OK]   scripts/bash/reverse/interfaces/utils/generate_interface_inventory.sh
+[OK]   scripts/bash/reverse/interfaces/utils/get_next_interface_batches.sh
+[OK]   scripts/bash/reverse/interfaces/utils/get_processing_progress.sh
+[OK]   scripts/bash/reverse/interfaces/utils/update_interface_batches_status.sh
+[OK]   scripts/bash/reverse/interfaces/utils/update_interface_status.sh
+[OK]   scripts/bash/reverse/on-demand/build-stage3-todos.sh
+[OK]   scripts/bash/reverse/on-demand/validate-stage3-gate.sh
+[OK→SKILL] scripts/bash/reverse/scenarios/utils/create_scenario_detail_batches.sh
+#       原缺失，已实现并内置于 omni-reverse/skills/reverse-scenarios/scripts/bash/
+#       （+ scripts/python/ 同名实现）。文档引用已改为 ${CLAUDE_PLUGIN_ROOT}/skills/...
+[OK→SKILL] scripts/bash/reverse/scenarios/utils/get_next_scenario_detail_batches.sh
+#       同上，已内置到 reverse-scenarios skill。
+[OK→SKILL] scripts/bash/reverse/scenarios/utils/get_scenario_detail_progress.sh
+#       同上，已内置到 reverse-scenarios skill。
+[OK→SKILL] scripts/bash/reverse/scenarios/utils/update_scenario_detail_batches_status.sh
+#       同上，已内置到 reverse-scenarios skill。
+
+# 1.2 PowerShell
+[OK]   scripts/powershell/check-interactive-mode.ps1
+[OK]   scripts/powershell/index/build-on-demand-index.ps1
+#       注：文档原误写为 scripts/powershell/reverse/index/（多了 reverse/ 层），
+#       实际位于 scripts/powershell/index/。文档引用已于本次修正。
+#       bash 侧 scripts/bash/reverse/index/ 与 powershell 侧目录结构不对称。
+
+# 1.3 Python
+[OK]   scripts/python/generate_interface_batches.py
+[OK]   scripts/python/generate_scenario_batches.py
+[OK]   scripts/python/merge_interface_results.py
+[OK]   scripts/python/merge_scenario_results.py
+[OK→SKILL] scripts/python/generate_entry_batches.py        # 原缺失，已实现并内置到 reverse-functions skill
+[OK→SKILL] scripts/python/generate_function_batches.py     # 同上
+[OK→SKILL] scripts/python/generate_function_doc_batches.py # 同上
+
+
+# ────────────────────────────────────────────────────────────────
+# 2. 间接依赖：Python 模块目录（被上述脚本 import / 调用，未在 skill 文档显式引用）
+# ────────────────────────────────────────────────────────────────
+[OK]   scripts/python/reverse_syntax_parser/                 # C/C++/Java/Python 语法解析器
+[OK]   scripts/python/reverse_entities/                      # 实体抽取
+[OK]   scripts/python/reverse_interfaces/                    # 接口批处理
+
+
+# ────────────────────────────────────────────────────────────────
+# 3. omni-infra（元模型/模板/记忆）—— 经 init_omni_infra 拷贝到代码工程 .omni-infra
+#    拷贝源：${DSDD}/omni-infra（由 init_omni_infra --plugin-root ${DSDD} 指定）
+# ────────────────────────────────────────────────────────────────
+
+# 3.1 metamodel（DSDD 元模型模板）
+[OK]   omni-infra/metamodel/1.requirement-template.md
+[OK]   omni-infra/metamodel/3.scenario-template.md
+[OK]   omni-infra/metamodel/5.function-template.md
+[OK]   omni-infra/metamodel/6.entity-template.md
+[OK]   omni-infra/metamodel/7.interface-template.md
+[OK]   omni-infra/metamodel/9.external-interface-template.md
+[OK]   omni-infra/metamodel/10.rules-templates/README.md
+
+# 3.2 templates（通用/逆向模板与配置）
+[OK]   omni-infra/templates/constraint-configuration-template.md
+[OK]   omni-infra/templates/interface-identification-rules-default.yaml
+[OK]   omni-infra/templates/interface-type-selection-template.md
+[OK]   omni-infra/templates/logic-architecture-template.md
+[OK]   omni-infra/templates/scenario-type-selection-template.md
+[OK]   omni-infra/templates/default/reverse-scenario-detail-template.md
+[OK]   omni-infra/templates/default/on-demand-function-detail-template.md
+#       注：文档原误写为 omni-infra/templates/on-demand-function-detail-template.md（漏 default/），
+#       实际位于 default/ 子目录。文档引用已于本次修正。
+[OK]   omni-infra/templates/default/on-demand-function-impact-analysis-template.md
+#       注：同上，文档原漏 default/，已于本次修正。
+[OK]   omni-infra/templates/final-confirmation-template.md
+#       原缺失，已在 omni-dsdd/omni-infra/templates/ 补全（配置确认向导 步骤3/3，对齐已有步骤1/2）。
+[OK]   omni-infra/templates/reverse-rule-execution-template.md
+#       原缺失，已在 omni-dsdd/omni-infra/templates/ 补全（reverse-rules 阶段2 单规则执行模板，
+#       占位符 {{RULE_ID}}/{{RULE_NAME}}/{{GLOBS_PATTERN}}/{{ALWAYS_APPLY}} 等）。
+[OK]   omni-infra/templates/reverse-rule-output-template.md
+#       原缺失，已在 omni-dsdd/omni-infra/templates/ 补全（reverse-rules 阶段3 通用兜底输出模板，
+#       占位符与 data.md 占位符表完全对齐）。
+
+# 3.3 memory
+[OK]   omni-infra/memory/constitution.md
+
+
+# ────────────────────────────────────────────────────────────────
+# 4. 汇总（脚本 + 模板全部补全后）
+# ────────────────────────────────────────────────────────────────
+# 脚本依赖：   28 项引用，[OK] 21 项，[OK→SKILL] 7 项（已补全实现，内置到归属 skill）
+# omni-infra 依赖： 18 项引用，[OK] 18 项（3 个原 MISS 模板已补全到 omni-dsdd/omni-infra/templates/）
+# 共计：       46 项引用，全部可用（[OK] 39 + [OK→SKILL] 7），[MISS] 0 项
+#
+# 本次补全（7 个原缺失脚本，已实现并置于归属 skill 的 scripts/ 下，自包含）：
+#   reverse-scenarios/scripts/{bash,python}/:
+#     - get_scenario_detail_progress.{sh,py}
+#     - create_scenario_detail_batches.{sh,py}
+#     - get_next_scenario_detail_batches.{sh,py}
+#     - update_scenario_detail_batches_status.{sh,py}
+#   reverse-functions/scripts/python/:
+#     - generate_entry_batches.py
+#     - generate_function_batches.py
+#     - generate_function_doc_batches.py
+#   文档引用已从 ${DSDD}/scripts/... 改为 ${CLAUDE_PLUGIN_ROOT}/skills/<skill>/scripts/...
+#   （powershell 行统一改为跨平台 python 调用）。
+#
+# 本次补全（3 个原缺失模板，已补全到 omni-dsdd/omni-infra/templates/，经 init_omni_infra 拷贝）：
+#   - final-confirmation-template.md       配置确认向导 步骤3/3
+#   - reverse-rule-execution-template.md   reverse-rules 阶段2 单规则执行模板
+#   - reverse-rule-output-template.md      reverse-rules 阶段3 通用兜底输出模板
+#
+# 仍待处理（与本次补全无关的既有问题）：
+#   - reverse-functions 阶段2 复用 generate_scenario_batches.py 时参数名 --entry-list
+#     与脚本实际 --file-list 不一致（脚本存在可用，仅参数名需对齐）。

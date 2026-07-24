@@ -1,8 +1,15 @@
 # Co-OmniSpec
 
-**Build high-quality software faster with Spec-Driven Development.**
+**Build high-quality software faster with [Spec-Driven Development](https://github.com/github/spec-kit).**
 
-Co-OmniSpec is an open-source toolkit for [Spec-Driven Development](https://github.com/github/spec-kit): specifications become executable and guide your AI coding agent through specification, design, task breakdown, and implementation. This project is a localized and extended adaptation of [GitHub Spec Kit](https://github.com/github/spec-kit), optimized for Cursor and other agent environments.
+Co-OmniSpec is an open-source toolkit that turns intent into structured specifications, design
+artefacts, and dependency-aware tasks, and then drives an AI coding agent through implementation.
+It is a localized and extended adaptation of [GitHub Spec Kit](https://github.com/github/spec-kit),
+optimised for Claude Code and other agent environments.
+
+Co-OmniSpec ships as two plugins from the `CoMind-plugins` marketplace: **`omni-dsdd`** for the
+Spec-Driven Development pipeline and **`omni-reverse`** for the reverse-engineering side. Both
+must be installed together.
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License"/></a>
@@ -12,183 +19,223 @@ Co-OmniSpec is an open-source toolkit for [Spec-Driven Development](https://gith
 
 ## Table of Contents
 
-- [What is Spec-Driven Development?](#-what-is-spec-driven-development)
-- [Get Started](#-get-started)
-- [Features](#-features)
-- [Development Workflow](#-development-workflow)
-- [Supported Environments](#-supported-environments)
-- [Core Philosophy](#-core-philosophy)
-- [Development Phases](#-development-phases)
-- [Project Structure](#-project-structure)
-- [Learn More](#-learn-more)
-- [Prerequisites](#-prerequisites)
-- [Troubleshooting](#-troubleshooting)
-- [Support](#-support)
-- [Acknowledgments](#-acknowledgments)
-- [License](#-license)
+1. [Project Overview & Spec-Driven Development](#1-project-overview--spec-driven-development)
+2. [Plugin Responsibilities](#2-plugin-responsibilities)
+3. [Prerequisites](#3-prerequisites)
+4. [Install Commands](#4-install-commands)
+5. [First Use](#5-first-use)
+6. [Workflow Map (express / standard / deep / expert)](#6-workflow-map)
+7. [Using Reverse Engineering](#7-using-reverse-engineering)
+8. [Repository Layout](#8-repository-layout)
+9. [Troubleshooting](#9-troubleshooting)
+10. [Contributing & Security](#10-contributing--security)
+11. [Acknowledgements & License](#11-acknowledgements--license)
 
 > **中文说明** — 请参阅 [README-zh-CN.md](README-zh-CN.md)。
 
 ---
 
-## 🤔 What is Spec-Driven Development?
+## 1. Project Overview & Spec-Driven Development
 
-Spec-Driven Development **flips the script** on traditional development: **specifications drive implementation**. Instead of code-first, you define the *what* and *why* first; your AI agent then uses those specs to produce design artifacts, task lists, and code. Co-OmniSpec provides commands and skills so that:
+Spec-Driven Development flips the traditional code-first workflow: **specifications drive
+implementation**. You write the *what* and *why* in natural language; your AI agent translates
+them into structured specifications, design notes, dependency-aware tasks, and finally code.
 
-- Specifications are created from natural language and validated with checklists.
-- Technical plans and design docs are generated from specs.
-- Tasks are ordered by dependency and ready for step-by-step implementation.
-- Implementation follows the plan and respects your project constitution.
+Co-OmniSpec provides:
+
+- A **constitution** that anchors every step in project-level principles.
+- A repeatable pipeline: `constitution → specify → clarify → design → tasks → implement → archive`.
+- Built-in support for **brownfield** work through reverse engineering of existing code.
+- **Quality gates** at each stage (clarify, analyze, checklist, review).
 
 ---
 
-## ⚡ Get Started
+## 2. Plugin Responsibilities
 
-### 1. Install Co-OmniSpec into your project
+Co-OmniSpec is **two plugins** in one marketplace. They share runtime assets but each focuses on
+half of the workflow:
 
-Clone this repository, then run the install script from the `build/` directory:
+| Plugin | Marketplace name | Focus | Plugin-local skills (highlights) | Shared assets |
+|--------|------------------|-------|---------------------------------|---------------|
+| **`omni-dsdd`** | `CoMind-plugins` | The Spec-Driven Development pipeline: harness, slash commands, shared templates, scripts, workflow YAML. | `specify`, `clarify`, `design`, `tasks`, `implement`, `archive`, `analyze`, `checklist`, `constitution`, `routing`, `workflow-orchestrator`, `knowledge-retrieval`, `create-branch`, `sdd`, and the on-demand `reverse-on-demand`. | Owns `.omni-infra/` (config, memory, metamodel, scripts, templates). |
+| **`omni-reverse`** | `CoMind-plugins` | Reverse engineering of existing code into SDD artefacts. | `reverse`, `reverse-orchestration`, `reverse-shared`, `reverse-logic-architecture`, `reverse-deep-logic-architecture`, `reverse-interfaces`, `reverse-external-interfaces`, `reverse-functions`, `reverse-entities`, `reverse-scenarios`, `reverse-requirements`, `reverse-rules`. | Depends on `omni-dsdd`; resolves `${DSDD}` through `scripts/resolve-dsdd-root.{sh, py, ps1}`. |
 
-**Linux / macOS:**
+Both plugins must be installed side by side. `omni-reverse` cannot run without `omni-dsdd`; the
+DSDD pipeline benefits from `omni-reverse` whenever the project has existing code to document.
+
+---
+
+## 3. Prerequisites
+
+| Requirement | Notes |
+|-------------|-------|
+| **Claude Code** | [code.claude.com](https://code.claude.com/) with plugin marketplace support. |
+| **Git** | Used for feature branches and the `changes/` directory. |
+| **Bash or PowerShell** | Required to execute the shared scripts under `.omni-infra/scripts/`. |
+| **Node + pnpm (optional)** | Needed only when validating the plugin's own skills locally (`pnpm validate` inside `omni-dsdd/`); see [CONTRIBUTING.md](CONTRIBUTING.md). |
+
+---
+
+## 4. Install Commands
+
+Add the marketplace and install both plugins:
+
+```text
+/plugin marketplace add ZTE-AICloud/Co-OmniSpec
+/plugin install omni-dsdd@CoMind-plugins
+/plugin install omni-reverse@CoMind-plugins
+```
+
+The first command is also accepted as `/market add ZTE-AICloud/Co-OmniSpec`.
+
+Equivalent CLI form (for non-interactive shells or CI):
 
 ```bash
-./build/install.sh cursor /path/to/your/project
+claude plugin marketplace add ZTE-AICloud/Co-OmniSpec
+claude plugin install omni-dsdd@CoMind-plugins
+claude plugin install omni-reverse@CoMind-plugins
 ```
 
-**Windows (PowerShell):**
+Verify:
 
-```powershell
-.\build\install.ps1 cursor C:\path\to\your\project
-```
+1. `/plugin marketplace list` (or `/market list`) — `CoMind-plugins` is registered.
+2. `/plugin` (Discover) — both `omni-dsdd` and `omni-reverse` are listed and enabled.
+3. In your project workspace, open AI chat and check that `/constitution`, `/specify`, `/reverse`,
+   `/routing` are visible.
 
-The script copies from Co-OmniSpec's `src/agent/` and `src/specify/` into your project's `.cursor` and `.specify` directories.
-
-### 2. Open your project in Cursor
-
-Open the project folder in [Cursor](https://cursor.sh/). The OmniSpec commands will be available in the AI chat.
-
-### 3. Establish project principles
-
-Use **`/omni.constitution`** to create your project's governing principles and development guidelines:
-
-```text
-/omni.constitution Create principles focused on code quality, testing standards, user experience consistency, and performance requirements.
-```
-
-### 4. Create the spec
-
-Use **`/omni.specify`** and describe what you want to build. Focus on the **what** and **why**, not the tech stack:
-
-```text
-/omni.specify Build a photo album app. Users can create albums, upload photos, and view them in a grid. Albums are flat (no nesting). No login in this first version.
-```
-
-### 5. Create a technical plan
-
-Use **`/omni.design`** with your tech stack and architecture choices:
-
-```text
-/omni.design Use Vite with minimal libraries. Vanilla HTML, CSS, and JavaScript. Store metadata in a local SQLite database.
-```
-
-### 6. Break down into tasks
-
-Use **`/omni.tasks`** to generate an actionable task list from your design:
-
-```text
-/omni.tasks
-```
-
-### 7. Execute implementation
-
-Use **`/omni.implement`** to execute all tasks and build the feature:
-
-```text
-/omni.implement
-```
-
-For detailed step-by-step instructions, see the [Getting Started](docs/GETTING_STARTED.md) guide and the [User Guide](docs/USER_GUIDE.md).
+If a plugin is missing, re-run its `install` command. The plugin guides cover the same commands
+in more detail ([omni-dsdd/README.md](omni-dsdd/README.md),
+[omni-reverse/README.md](omni-reverse/README.md)).
 
 ---
 
-## 📋 Features
+## 5. First Use
 
-| Area | Description |
-|------|-------------|
-| **Constitution** | Project principles and guidelines that steer all later phases. |
-| **Specify** | Turn a short feature description into a full spec (branch, context, spec, requirements checklist). |
-| **Clarify** | Targeted questions to remove ambiguity before design. |
-| **Design** | Generate technical plan, data model, contracts, quickstart from spec. |
-| **Tasks** | Break the plan into ordered, dependency-aware tasks in `tasks.md`. |
-| **Implement** | Execute tasks from `tasks.md` in sequence. |
-| **Analyze** | Cross-artifact consistency checks (spec, design, tasks) before implementation. |
-| **Checklist** | Custom checklists to validate requirement quality. |
-| **Reverse** | Reverse-engineer existing code into full specification and context. |
+A minimal first run uses only `omni-dsdd`:
 
-Metamodel and templates support requirements, context, scenarios, logic architecture, functions, entities, interfaces, and relations for both greenfield and brownfield workflows.
+1. **Constitution** — run `/constitution` and describe the principles you want (code quality,
+   testing standards, UX, performance). The agent creates or updates
+   `.omni-infra/memory/constitution.md`.
+2. **Specify** — run `/specify` with a feature description (the *what* and *why*). The agent
+   creates a feature branch and `changes/<branch>/{spec.md, context.md, checklists/requirements.md}`.
+3. **Clarify** (recommended) — run `/clarify` to resolve ambiguities and write answers back into
+   the spec.
+4. **Design** — run `/design` with your stack. Generates `design.md`, `research.md`,
+   `data-model.md`, `quickstart.md`, and (when relevant) `contracts/`.
+5. **Tasks** — run `/tasks` to break the design into ordered, dependency-aware tasks
+   (`tasks.md`).
+6. **Implement** — run `/implement` to execute tasks in order.
+7. **Archive** (recommended after completion) — run `/archive` to archive/merge back completed
+   feature artefacts.
+
+For brownfield projects, install `omni-reverse` first and start with step 0: `/reverse` to
+document existing behaviour before changing it (see [Section 7](#7-using-reverse-engineering)).
+
+Detailed walkthroughs live in [omni-dsdd/GETTING_STARTED.md](omni-dsdd/GETTING_STARTED.md) and the
+full command reference in [omni-dsdd/USER_GUIDE.md](omni-dsdd/USER_GUIDE.md).
 
 ---
 
-## 🔄 Development Workflow
+## 6. Workflow Map
+
+The `routing` skill selects one of three YAML-defined workflows, executed by
+`workflow-orchestrator`:
+
+| flow_mode | YAML definition | Typical use case | Key difference |
+|-----------|-----------------|------------------|----------------|
+| `express` | `omni-dsdd/workflows/express.yaml` | Small, clear change | Skips `clarify` to reduce iterations. |
+| `standard` | `omni-dsdd/workflows/standard.yaml` | Medium-complexity feature | Full `specify → clarify → design` path. |
+| `deep` | `omni-dsdd/workflows/deep.yaml` | Large or architecture-heavy change | Adds `reverse-on-demand` before `specify`. |
+| `expert` | `omni-dsdd/workflows/expert.yaml` | Internal review variant | Not advertised as a public `flow_mode`; not user-selectable. |
+
+Let `routing` decide by complexity, or force a mode with `--workflow <express|standard|deep>`.
+Add `--e2e` to enable E2E test design in `specify` and `design`. Examples:
 
 ```text
-/omni.constitution  →  /omni.specify  →  /omni.clarify  →  /omni.design  →  /omni.tasks  →  /omni.analyze  →  /omni.implement
-       │                     │                  │                │                │                │
-   Principles           spec.md           Clarifications    design.md         tasks.md      Consistency    Code
-                       context.md         in spec           research.md                      check
-                       checklists                          data-model.md
-                                                optional    contracts/
+/routing Build a small dashboard for internal metrics.
+/routing --workflow standard Build a partner API with auth and rate limiting.
+/routing --workflow deep --e2e Refactor order orchestration and align cross-service contracts.
 ```
 
-Optional commands: `/omni.checklist` (requirement checklists), `/omni.reverse` (code → spec).
+The trailing `express|standard|deep` are `flow_mode` values, not skill names; the workflow YAML
+files live under `omni-dsdd/workflows/`.
 
 ---
 
-## 🤖 Supported Environments
+## 7. Using Reverse Engineering
 
-| Environment | Support | Notes |
-|-------------|---------|-------|
-| [Cursor](https://cursor.sh/) | Yes | Primary target; slash commands and skills are provided for Cursor. |
-| Other AI agents | Adapted | The command/skill pattern and `.specify/` layout can be adapted for other agents (e.g. Claude Code, Windsurf) by adjusting the agent directory name when installing. |
+Reverse engineering lives in the **omni-reverse** plugin. Use it for brownfield work or when you
+need to document an existing codebase before refactoring it.
 
----
+Entry points (driven by the `reverse` skill in `omni-reverse`):
 
-## 📚 Core Philosophy
+- **Full** — `/reverse --target all`
+- **On-demand** — `/reverse --target on-demand --requirement "<requirement-or-file>"`
+- **By element** — `/reverse --target requirements|scenarios|interfaces|rules|...`
 
-Co-OmniSpec's Spec-Driven Development emphasizes:
+`omni-reverse` provides 12 dedicated skills (`reverse`, `reverse-orchestration`, `reverse-shared`,
+`reverse-logic-architecture`, `reverse-deep-logic-architecture`, `reverse-interfaces`,
+`reverse-external-interfaces`, `reverse-functions`, `reverse-entities`, `reverse-scenarios`,
+`reverse-requirements`, `reverse-rules`) that produce the corresponding SDD artefacts. The shared
+infrastructure — paths, templates, scripts — comes from `omni-dsdd`'s `.omni-infra/`.
 
-- **Intent-driven development** — Specifications define the *what* before the *how*.
-- **Rich specification creation** — Guardrails, checklists, and constitution guide quality.
-- **Multi-step refinement** — Clarify → design → tasks → implement, rather than one-shot code generation.
-- **Heavy reliance on AI** — The agent interprets specs, fills templates, and runs tasks under your principles.
-
----
-
-## 🌟 Development Phases
-
-| Phase | Focus | Key activities |
-|-------|--------|-----------------|
-| **0-to-1 (Greenfield)** | Generate from scratch | Start with requirements → spec → design → tasks → implementation. |
-| **Iterative enhancement (Brownfield)** | Add or modernize | Use `/omni.reverse` to document existing code, then refine and extend with specify/design/tasks. |
-| **Quality and consistency** | Before implementation | Use `/omni.clarify`, `/omni.analyze`, and `/omni.checklist` to reduce rework. |
+See [omni-reverse/README.md](omni-reverse/README.md) for the full reverse-side reference.
 
 ---
 
-## 📁 Project Structure
+## 8. Repository Layout
 
-After installation, your project will contain:
+```text
+Co-OmniSpec/
+├── .claude-plugin/
+│   └── marketplace.json          # Registers both plugins under CoMind-plugins
+├── omni-dsdd/
+│   ├── .claude-plugin/plugin.json
+│   ├── agents/                   # AI subagents (constitution, knowledge extractors, ...)
+│   ├── hooks/                    # Lifecycle hooks
+│   ├── omni-infra/               # Shared .omni-infra/ assets
+│   │   ├── config/
+│   │   ├── memory/
+│   │   ├── metamodel/
+│   │   ├── scripts/
+│   │   └── templates/
+│   ├── scripts/                  # Node-based validation helpers
+│   ├── skills/                   # Slash-command and workflow skills
+│   ├── workflows/                # express.yaml / standard.yaml / deep.yaml / expert.yaml
+│   ├── README.md / README-zh-CN.md
+│   ├── GETTING_STARTED.md / GETTING_STARTED_zh-CN.md
+│   ├── USER_GUIDE.md / USER_GUIDE_zh-CN.md
+│   ├── CHANGELOG.md
+│   ├── LICENSE                   # Same bytes as root LICENSE
+│   ├── package.json
+│   └── pnpm-workspace.yaml
+├── omni-reverse/
+│   ├── .claude-plugin/plugin.json
+│   ├── agents/                   # Reverse-specific subagents
+│   ├── scripts/                  # resolve-dsdd-root.{sh,py,ps1}
+│   ├── skills/                   # 12 reverse skills (see omni-reverse/README.md)
+│   ├── README.md
+│   └── require.txt
+├── README.md / README-zh-CN.md   # This document (English / 中文)
+├── CONTRIBUTING.md
+├── SECURITY.md
+├── THIRD_PARTY_NOTICES.md
+└── LICENSE                       # MIT, Copyright (c) 2026 ZTE-AICloud / ZTE
+```
+
+After installation, the **target** project (the codebase the AI agent works on) gains:
 
 ```text
 your-project/
-├── .cursor/
-│   ├── commands/          # OmniSpec slash commands
-│   └── skills/            # Skills for specify, design, tasks, implement, etc.
-├── .specify/
-│   ├── memory/
-│   │   └── constitution.md
-│   ├── metamodel/          # Requirement, context, scenario, architecture, etc.
-│   ├── scripts/           # Bash and PowerShell helpers
-│   └── templates/         # spec, design, tasks, checklist templates
-└── changes/               # Feature directories (created by /omni.specify)
+├── .claude/
+│   ├── commands/                 # OmniSpec slash commands (from omni-dsdd)
+│   └── skills/                   # Skills (from omni-dsdd and omni-reverse)
+├── .omni-infra/                  # Shared templates, scripts, memory, metamodel
+│   ├── memory/constitution.md
+│   ├── metamodel/
+│   ├── scripts/                  # Bash and PowerShell helpers
+│   └── templates/                # spec, design, tasks, checklist templates
+└── changes/                      # Feature directories (created by /specify)
     └── 001-feature-name/
         ├── spec.md
         ├── context.md
@@ -197,75 +244,68 @@ your-project/
         └── checklists/
 ```
 
----
-
-## 📖 Learn More
-
-- **[Getting Started](docs/GETTING_STARTED.md)** — Installation and first run (English).
-- **[Getting Started (中文)](docs/GETTING_STARTED_zh-CN.md)** — 安装与首次使用（中文）。
-- **[User Guide](docs/USER_GUIDE.md)** — Full workflow and command reference (English).
-- **[User Guide (中文)](docs/USER_GUIDE_zh-CN.md)** — 完整工作流与命令说明（中文）。
-- **[Build scripts](build/readme.md)** — Co-OmniSpec build and packaging (Linux/Windows).
-
-<details>
-<summary>📋 Click to expand detailed step-by-step process</summary>
-
-After installing Co-OmniSpec and opening your project in Cursor:
-
-1. **Constitution** — Run `/omni.constitution` and describe your project principles. This creates or updates `.specify/memory/constitution.md`.
-2. **Specify** — Run `/omni.specify` and provide a feature description (what and why). This creates a branch, `changes/<branch>/spec.md`, `context.md`, and a requirements checklist.
-3. **Clarify** (recommended before design) — Run `/omni.clarify` to resolve ambiguities; answers are written back into the spec.
-4. **Design** — Run `/omni.design` with your tech stack. This produces `design.md`, `research.md`, `data-model.md`, `quickstart.md`, and optional `contracts/`.
-5. **Tasks** — Run `/omni.tasks` to generate `tasks.md` with ordered, dependency-aware tasks.
-6. **Analyze** (optional) — Run `/omni.analyze` to check consistency across spec, design, and tasks before implementing.
-7. **Implement** — Run `/omni.implement` to execute the tasks in order. The agent may run CLI commands (e.g. `npm`, `dotnet`); ensure required tools are installed.
-
-For full details and troubleshooting, see the [Getting Started](docs/GETTING_STARTED.md) and [User Guide](docs/USER_GUIDE.md).
-
-</details>
+The path `.omni-infra/` is the shared runtime directory used by both plugins inside the
+target project.
 
 ---
 
-## 🔧 Prerequisites
+## 9. Troubleshooting
 
-- **Cursor** (or another AI coding agent that supports the provided command/skill pattern).
-- **Git** (for feature branches and `changes/` workflow).
-- **Bash** (Linux/macOS) or **PowerShell** (Windows) for scripts.
+### Slash commands are not visible
 
----
+- Confirm the marketplace is registered: `/plugin marketplace list` (or `/market list`) — `CoMind-plugins` should appear.
+- Confirm both plugins are installed: `/plugin` (Discover) — `omni-dsdd` and `omni-reverse` should both be listed.
+- Re-open the project session after installing a plugin.
 
-## 🔍 Troubleshooting
+### Plugin installation fails
 
-### Commands not visible in Cursor
+- Run `/plugin marketplace list`. If `CoMind-plugins` is missing, re-add it:
+  `/plugin marketplace add ZTE-AICloud/Co-OmniSpec`.
+- Re-run the install commands:
+  `/plugin install omni-dsdd@CoMind-plugins`, `/plugin install omni-reverse@CoMind-plugins`.
+- CLI mode equivalents:
+  `claude plugin marketplace add ZTE-AICloud/Co-OmniSpec`,
+  `claude plugin install omni-dsdd@CoMind-plugins`,
+  `claude plugin install omni-reverse@CoMind-plugins`.
 
-Ensure Co-OmniSpec is installed in **this** project: check that `.cursor/commands/` and `.specify/` exist. Reload the window or restart Cursor to load the new commands.
+### `/reverse` reports "omni-dsdd not found"
 
-### Install script fails
-
-- Use **absolute paths** for the target project.
-- **Windows:** Run PowerShell with an execution policy that allows scripts (e.g. `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`).
-- **Linux/macOS:** Make the script executable: `chmod +x build/install.sh`.
+- `omni-reverse` resolves the shared `.omni-infra/` assets through `omni-dsdd`'s install root.
+  Install `omni-dsdd` from the same `CoMind-plugins` marketplace and re-run `/reverse`.
 
 ### Branch or feature directory not created
 
-Ensure Git is available and the current directory is a valid repository. You can run the create-branch script manually to see errors (see [User Guide — Troubleshooting](docs/USER_GUIDE.md#troubleshooting)).
+- Confirm Git is available and the working directory is a valid repo.
+- Run the create-branch helper manually to inspect errors. The helper ships in the
+  `create-branch` skill under `omni-dsdd/skills/create-branch/scripts/`.
 
-For more issues and solutions, see the [User Guide](docs/USER_GUIDE.md#troubleshooting).
+### Implement runs wrong commands or fails
 
----
-
-## 💬 Support
-
-For questions or issues, open a GitHub issue in this repository. For detailed workflow and command help, see the [User Guide](docs/USER_GUIDE.md) and [Getting Started](docs/GETTING_STARTED.md).
-
----
-
-## 🙏 Acknowledgments
-
-Co-OmniSpec is inspired by and extends [GitHub Spec Kit](https://github.com/github/spec-kit), following its Spec-Driven Development philosophy and adapting the workflow for Cursor and other agent toolchains.
+- Confirm `tasks.md` exists and is well-formed under your `changes/<branch>/` directory.
+- Confirm required tools (`npm`, `dotnet`, `python`, …) are installed and on `PATH`.
+- Run a single task manually to surface the exact error before retrying `/implement`.
 
 ---
 
-## 📄 License
+## 10. Contributing & Security
 
-See [LICENSE](LICENSE) for terms.
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** — issue / pull-request workflow, local validation
+  (`pnpm validate`, language self-tests), documentation conventions, credential policy.
+- **[SECURITY.md](SECURITY.md)** — how to report vulnerabilities through GitHub Security
+  Advisories, and what to do if you accidentally expose a credential in an issue or commit.
+
+**Never** commit real credentials, tokens, internal hostnames, or private URLs. Use
+`PLACEHOLDER_*` values in examples.
+
+---
+
+## 11. Acknowledgements & License
+
+Co-OmniSpec is inspired by and extends [GitHub Spec Kit](https://github.com/github/spec-kit),
+following its Spec-Driven Development philosophy and adapting the workflow for Claude Code and
+other agent toolchains. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for the relevant
+acknowledgement and license notice.
+
+License: **MIT** — see [LICENSE](LICENSE). Copyright (c) 2026 ZTE-AICloud / ZTE.
+
+> **English** — See [README.md](README.md). **中文** — 参见 [README-zh-CN.md](README-zh-CN.md)。

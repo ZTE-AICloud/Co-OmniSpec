@@ -1,0 +1,13 @@
+开始测试并行处理脚本...
+已创建测试环境: /tmp/omnispec_test_nm0qrz59
+测试 get_next_batches.py 脚本...
+获取到 2 个批次:
+  批次 1: pending
+  批次 2: pending
+
+测试 update_batches_status.py 脚本...
+更新结果: {'success': [{'batch_number': 1, 'status': 'processing'}, {'batch_number': 2, 'status': 'processing'}], 'failed': []}
+批次状态更新成功
+
+✅ 所有测试通过!
+已清理测试环境: /tmp/omnispec_test_nm0qrz59

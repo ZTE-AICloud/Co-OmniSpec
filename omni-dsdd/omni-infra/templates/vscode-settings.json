@@ -1,0 +1,13 @@
+{
+    "chat.promptFilesRecommendations": {
+        "constitution": true,
+        "specify": true,
+        "design": true,
+        "tasks": true,
+        "implement": true
+    },
+    "chat.tools.terminal.autoApprove": {
+        ".omni-infra/scripts/bash/": true,
+        ".omni-infra/scripts/powershell/": true
+    }
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/pyright/main/packages/vscode-pyright/schemas/pyrightconfig.schema.json",
+  "include": [
+    "**/*.py"
+  ],
+  "exclude": [
+    "**/node_modules",
+    "**/__pycache__",
+    ".git",
+    ".venv",
+    "venv"
+  ],
+  "typeCheckingMode": "basic",
+  "pythonVersion": "3.8",
+  "venvPath": ".",
+  "venv": ".venv"
+}

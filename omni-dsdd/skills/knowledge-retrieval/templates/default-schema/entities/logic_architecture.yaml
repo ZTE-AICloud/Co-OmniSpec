@@ -1,0 +1,91 @@
+type_id: logic_architecture
+cardinality: single
+file_pattern: "logic_architecture.md"
+desc: "逻辑架构文档，描述系统内部的逻辑实体、层次划分、数据流向与核心机制。项目唯一。"
+instance_format: markdown-with-frontmatter
+version: 1
+
+frontmatter:
+  - name: 名称
+    key: name
+    content_type: scalar
+    required: true
+    desc: "逻辑架构文档标题。"
+
+  - name: 简述
+    key: brief
+    content_type: scalar
+    required: true
+    desc: "一句话概括系统逻辑架构特征（如分层风格、核心模式）。"
+
+  - name: 版本
+    key: version
+    content_type: scalar
+    required: false
+    desc: "文档版本号。"
+
+attributes:
+  - name: 架构概述
+    key: architecture_overview
+    content_type: prose
+    required: true
+    desc: "系统定位、技术架构特点、架构层次划分与设计原则的总体叙述。"
+
+  - name: 逻辑架构图
+    key: logic_architecture_diagram
+    content_type: plantuml
+    required: true
+    desc: "PlantUML 逻辑实体图，展示各层逻辑实体、包含关系与依赖关系。"
+
+  - name: 架构逻辑实体说明
+    key: logic_entity_description
+    content_type: prose
+    required: true
+    desc: "按层次分组，对每个逻辑实体的职责、主要接口、依赖关系做文字说明。"
+
+  - name: 数据流向分析
+    key: data_flow_analysis
+    content_type: prose
+    required: true
+    desc: "主要业务流程的输入、处理路径（经过哪些逻辑实体做何种操作）、输出。"
+
+  - name: 核心业务机制说明
+    key: core_mechanism_description
+    content_type: prose
+    required: true
+    desc: "生命周期管理、消息分发、配置管理、错误处理、状态同步、性能优化等横切机制的说明。"
+
+  - name: 设计原则
+    key: design_principles
+    content_type: list
+    required: false
+    desc: "系统遵循的设计原则与关键架构决策。"
+
+  - name: 技术栈
+    key: tech_stack
+    content_type: list
+    required: false
+    desc: "通信协议、框架/库、数据存储、开发语言清单。"
+
+  - name: 扩展性设计
+    key: extensibility
+    content_type: prose
+    required: false
+    desc: "水平扩展、功能扩展、接口扩展的实现方式。"
+
+  - name: 约束与限制
+    key: constraints_and_limits
+    content_type: list
+    required: false
+    desc: "性能限制、资源限制、并发限制、容量限制等边界条件。"
+
+retrieval:
+  vector:
+    - architecture_overview
+    - logic_entity_description
+    - data_flow_analysis
+    - core_mechanism_description
+    - extensibility
+  keyword:
+    - name
+  extract_refs: []

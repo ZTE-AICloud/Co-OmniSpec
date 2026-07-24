@@ -1,0 +1,79 @@
+type_id: context
+cardinality: single
+file_pattern: "context.md"
+desc: "系统上下文文档，描述系统的对外边界、外部系统及交互关系（C4 Context 视角）。项目唯一。"
+instance_format: markdown-with-frontmatter
+version: 1
+
+frontmatter:
+  - name: 名称
+    key: name
+    content_type: scalar
+    required: true
+    desc: "系统上下文文档标题。"
+
+  - name: 简述
+    key: brief
+    content_type: scalar
+    required: true
+    desc: "一句话说明系统定位及其在更大架构中的位置。"
+
+  - name: 版本
+    key: version
+    content_type: scalar
+    required: false
+    desc: "文档版本号，用于变更追溯。"
+
+attributes:
+  - name: 概述
+    key: overview
+    content_type: prose
+    required: true
+    desc: "系统定位、核心职责、在整体架构中的位置、与外部系统交互关系的总体叙述。"
+
+  - name: 上下文图
+    key: context_diagram
+    content_type: plantuml
+    required: true
+    desc: "PlantUML C4 Context 图。"
+
+  - name: 系统说明
+    key: system_description
+    content_type: prose
+    required: true
+    desc: "当前系统与各外部系统的名称、类型、职责、交互关系的结构化描述。"
+
+  - name: 交互关系说明
+    key: interaction_description
+    content_type: prose
+    required: true
+    desc: "每一对交互的双方、内容、方向、协议/技术、场景的详细描述。"
+
+  - name: 协议与技术栈
+    key: protocol_stack
+    content_type: list
+    required: false
+    desc: "系统与外部系统交互使用的协议、消息格式、通信框架清单。"
+
+  - name: 系统边界
+    key: system_boundary
+    content_type: prose
+    required: false
+    desc: "说明系统负责与不负责的范围，以及与其他系统的职责划分。"
+
+  - name: 约束与假设
+    key: constraints
+    content_type: list
+    required: false
+    desc: "系统运行的环境约束与前置假设。"
+
+retrieval:
+  vector:
+    - overview
+    - system_description
+    - interaction_description
+    - system_boundary
+    - constraints
+  keyword:
+    - name
+  extract_refs: []

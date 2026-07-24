@@ -1,0 +1,23 @@
+{
+  "skill_name": "eval-code-evaluator",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I need to evaluate the quality of this Python function that supposed to validate email addresses. The requirements were to check if an email has a valid format with @ symbol and proper domain structure. Here's the generated code: \n\ndef validate_email(email):\n    if '@' in email:\n        return True\n    return False\n\nCan you assess how well this implementation meets the requirements?",
+      "expected_output": "A structured evaluation with ICE Score and Code Judge metrics, noting that the function is overly simplistic and doesn't properly validate email format (e.g., missing validation for domain part, multiple @ symbols, etc.).",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "My AI generated this sorting algorithm but I'm not sure if it's correct. The requirement was to implement a bubble sort that sorts in ascending order. Here's the code:\n\ndef bubble_sort(arr):\n    n = len(arr)\n    for i in range(n):\n        for j in range(0, n-i-1):\n            if arr[j] > arr[j+1]:\n                arr[j], arr[j+1] = arr[j+1], arr[j]\n    return arr\n\nI also have a reference implementation that I know works correctly. Can you compare them?",
+      "expected_output": "The evaluation should confirm the implementation is correct (score close to 1.0 for functional correctness) and provide detailed Code Judge analysis. With reference code, the evaluation should be more accurate.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "We asked our model to implement user authentication with JWT tokens in a Flask application. The generated code seems to work but has some security concerns. Can you evaluate this code against security best practices?\n\nRequirements: authenticate user, generate JWT token, verify token on protected routes\n\nGenerated code includes login endpoint, token generation using HS256, and a decorator for route protection.",
+      "expected_output": "The evaluation should identify security issues in the Code Judge section (e.g., lack of token expiration检查, hard-coded secrets, etc.) while providing balanced ICE Score for functionality.",
+      "files": []
+    }
+  ]
+}

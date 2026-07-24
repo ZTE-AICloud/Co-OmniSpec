@@ -1,0 +1,57 @@
+{
+  "schema_version": "1",
+  "description": "reverse-on-demand 阶段2（波及检索）Harness 契约：四项强制约束的可机读校验规则",
+  "constraints": {
+    "search_scope": {
+      "artifact": "stage2-search-coverage.json",
+      "rules": [
+        "未指定 --path 时：scan_mode 必须为 full_repo，且 top_level_entries_scanned 覆盖仓库顶层目录（扣除标准排除项）",
+        "指定 --path 时：scan_mode 必须为 scoped，scope.include_paths 与输入参数一致",
+        "指定 --exclude 时：scope.exclude_globs 必须与输入参数一致",
+        "不得扫描 scope 外路径，且 covered_paths 不得命中 exclude_globs"
+      ]
+    },
+    "call_chain_depth": {
+      "artifact": "stage2-call-trace.json",
+      "rules": [
+        "每条入口根符号须有独立 trace 记录",
+        "禁止在未达 min_required_depth 且无 leaf_evidence 时以 depth_limit/token_budget/manual_stop 停止",
+        "仅允许在 leaf_no_callees 或已达 max_depth_cap 且附 leaf_evidence 时提前结束"
+      ],
+      "defaults": {
+        "min_required_depth": 8,
+        "max_depth_cap": 32
+      }
+    },
+    "config_parse": {
+      "artifact": "stage2-static-asset-scan.json",
+      "rules": [
+        "命中的配置文件不得仅列路径（listed_only/skipped）",
+        "parse_status 必须为 parsed，且 extracted_keys 非空或 structure_summary 足够长",
+        "须记录 parse_method 与消费方/读取方关联（consumer_refs 或 runtime_consumers）"
+      ]
+    },
+    "polyglot_coverage": {
+      "artifact": "stage2-search-coverage.json",
+      "rules": [
+        "coverage.languages 必须为非空数组（禁止只分析主语言、忽略附属语言）",
+        "每个语言须含 name、role(primary|auxiliary)、coverage_status(covered|degraded)、analysis_method(lsp/grep/read/manual)",
+        "coverage_status 不得为裸 uncovered；degraded 必须含非空 degraded_rationale",
+        "至少一个 role=primary",
+        "Harness 自动扫盘（扩展名白名单）发现仓库实际语言必须全部在 languages 中声明，漏报即失败；scoped 模式仅扫 scope 内",
+        "波及校验：每个 auxiliary 语言须含 impact_status(hit|no_hit)；hit 时波及清单(stage2-impact-candidates.json)必须出现该语言命中（由 language 字段或 code_file_path 推断），no_hit 时必须附 no_impact_rationale 且清单中不得命中该语言；禁止沉默遗漏"
+      ]
+    }
+  },
+  "gate_steps": {
+    "stage2": [
+      "search_scope",
+      "call_chain_depth",
+      "config_parse",
+      "polyglot_coverage"
+    ],
+    "stage3": [
+      "validate-stage3-gate.sh"
+    ]
+  }
+}

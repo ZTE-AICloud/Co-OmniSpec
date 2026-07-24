@@ -1,0 +1,222 @@
+{
+  "version": "1.0",
+  "description": "design 阶段产物与 omni-infra/skills 模板的结构契约；由 design_template_gate.py 在 design-gate 各步骤执行。",
+  "template_sources": {
+    "design": "omni-infra/templates/design-template.md",
+    "data_model": "omni-infra/templates/data-model-template.md",
+    "quickstart": "omni-infra/templates/quickstart-template.md",
+    "function_metamodel": "omni-infra/metamodel/5.function-template.md",
+    "entity_metamodel": "omni-infra/metamodel/6.entity-template.md",
+    "interface_metamodel": "omni-infra/metamodel/7.interface-template.md"
+  },
+  "artifacts": {
+    "research.md": {
+      "required_tokens": [
+        "Details:",
+        "Rationale:",
+        "Reference:"
+      ],
+      "forbidden_tokens": [
+        "Harness 占位",
+        "## Details: TBD",
+        "## Rationale: TBD"
+      ],
+      "min_chars": 120
+    },
+    "design.md": {
+      "gate_steps": {
+        "3": {
+          "required_headings": [
+            "摘要",
+            "技术背景",
+            "波及文件与复用分析",
+            "章程检查",
+            "项目结构"
+          ],
+          "min_section_chars_by_heading": {
+            "技术背景": 80,
+            "章程检查": 80
+          },
+          "patterns": [
+            {
+              "id": "tech_lang",
+              "regex": "\\*\\*语言/版本\\*\\*:",
+              "min_count": 1,
+              "hint": "须按 design-template.md 填写 **语言/版本**"
+            },
+            {
+              "id": "charter_checklist",
+              "regex": "^- \\[[ xX]\\]",
+              "min_count": 4,
+              "hint": "章程检查须含 checkbox（见 design-template.md）"
+            },
+            {
+              "id": "impact_table",
+              "regex": "^\\|[^|]+\\|[^|]+\\|",
+              "min_count": 2,
+              "hint": "波及文件与复用分析须含表格行"
+            }
+          ],
+          "forbidden_tokens": [
+            "[例如: Python 3.11",
+            "[###-feature-name]",
+            "[DATE]",
+            "[从功能规范中提取"
+          ],
+          "max_forbidden_token_hits": 2
+        },
+        "1a": {
+          "required_headings": ["功能"],
+          "patterns": [
+            {
+              "id": "func_id",
+              "regex": "FUNC-\\d{3}",
+              "min_count": 1,
+              "hint": "功能章节须含 FUNC-XXX（见 design-function）"
+            },
+            {
+              "id": "func_action",
+              "regex": "(INSERT|MODIFY|DELETE|REFER)\\s*-\\s*FUNC-",
+              "min_count": 1,
+              "hint": "功能条目须为 动作类型 - FUNC-XXX 格式"
+            },
+            {
+              "id": "func_source",
+              "regex": "\\*\\*来源场景\\*\\*:",
+              "min_count": 1,
+              "hint": "功能条目须含 **来源场景**"
+            },
+            {
+              "id": "func_desc",
+              "regex": "\\*\\*功能描述\\*\\*:",
+              "min_count": 1,
+              "hint": "功能条目须含 **功能描述**"
+            }
+          ]
+        },
+        "1b": {
+          "required_headings": ["逻辑实体"],
+          "patterns": [
+            {
+              "id": "entity_id",
+              "regex": "ENTITY-\\d{3}",
+              "min_count": 1,
+              "hint": "逻辑实体须含 ENTITY-XXX（见 design-entity）"
+            },
+            {
+              "id": "entity_action",
+              "regex": "(INSERT|MODIFY|DELETE|REFER)\\s*-\\s*\\[?ENTITY-",
+              "min_count": 1,
+              "hint": "逻辑实体条目须标注动作类型"
+            }
+          ]
+        },
+        "9": {
+          "required_headings": ["修改点严格检查"],
+          "patterns": [
+            {
+              "id": "strict_check_header",
+              "regex": "^\\|修改点\\|",
+              "min_count": 1,
+              "hint": "修改点严格检查须含标准表头（见 design-template.md）"
+            },
+            {
+              "id": "strict_check_rows",
+              "regex": "^\\|[^|]+\\|[^|]+\\|[^|]+\\|[^|]+\\|[^|]+\\|",
+              "min_count": 2,
+              "hint": "修改点严格检查须至少 1 条数据行"
+            }
+          ]
+        }
+      }
+    },
+    "data-model.md": {
+      "required_headings": ["核心数据结构图", "数据结构关系"],
+      "forbidden_tokens": ["Harness 占位"],
+      "patterns": [
+        {
+          "id": "data_structure_section",
+          "regex": "^###\\s+\\d+\\.\\s+",
+          "min_count": 1,
+          "hint": "须按 data-model-template.md 描述至少一个数据结构"
+        },
+        {
+          "id": "key_fields",
+          "regex": "\\*\\*关键字段\\*\\*:",
+          "min_count": 1,
+          "hint": "数据结构须含 **关键字段**"
+        }
+      ],
+      "min_chars": 150
+    },
+    "contracts/api-contract.md": {
+      "forbidden_tokens": ["Harness 占位"],
+      "patterns": [
+        {
+          "id": "contract_title",
+          "regex": "^#\\s+接口契约",
+          "min_count": 1,
+          "hint": "须以 # 接口契约 为标题（见 design-interface）"
+        },
+        {
+          "id": "api_id",
+          "regex": "API-\\d{3}",
+          "min_count": 1,
+          "hint": "对外接口须含 API-XXX（见 design-interface）"
+        },
+        {
+          "id": "iface_action",
+          "regex": "(INSERT|MODIFY|DELETE|REFER)\\s*-\\s*API-",
+          "min_count": 1,
+          "hint": "接口条目须为 动作类型 - API-XXX 格式"
+        },
+        {
+          "id": "iface_section",
+          "regex": "##\\s+对外接口|##\\s+内部接口",
+          "min_count": 1,
+          "hint": "须含 ## 对外接口 或 ## 内部接口"
+        },
+        {
+          "id": "iface_change_reason",
+          "regex": "\\*\\*变更原因\\*\\*:",
+          "min_count": 1,
+          "hint": "接口条目须含 **变更原因**"
+        }
+      ],
+      "min_chars": 120
+    },
+    "quickstart.md": {
+      "required_headings": ["前置条件", "验证步骤", "期望结果"],
+      "forbidden_tokens": ["Harness 占位"],
+      "patterns": [
+        {
+          "id": "numbered_steps",
+          "regex": "^\\s*\\d+\\.\\s+\\S",
+          "min_count": 2,
+          "hint": "验证步骤须至少 2 条编号步骤（见 quickstart-template.md）"
+        }
+      ],
+      "max_tbd_count": 2
+    },
+    "e2e-impl-design.md": {
+      "required_headings": [
+        "用例实现映射",
+        "入口函数",
+        "外部依赖",
+        "测试数据",
+        "验证点"
+      ],
+      "min_chars": 200
+    }
+  },
+  "gate_step_artifacts": {
+    "0": ["research.md"],
+    "3": ["design.md"],
+    "1a": ["design.md"],
+    "1b": ["design.md", "data-model.md"],
+    "1c": ["contracts/api-contract.md"],
+    "1d": ["quickstart.md"],
+    "9": ["design.md"],
+    "4": ["e2e-impl-design.md"]
+  }
+}

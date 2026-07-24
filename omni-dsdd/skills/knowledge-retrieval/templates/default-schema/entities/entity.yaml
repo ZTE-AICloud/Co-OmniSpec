@@ -1,0 +1,88 @@
+type_id: entity
+cardinality: multi
+desc: "逻辑实体，承担一部分业务职责，对外提供属性与方法，是功能的实现载体。"
+id_pattern: "^ENTITY-\\d{3}$"
+file_pattern: "ENTITY-*.md"
+instance_format: markdown-with-frontmatter
+
+attributes:
+  - name: 标识
+    key: id
+    location: meta
+    role: identifier
+    content_type: scalar
+    required: true
+    searchable: keyword
+    desc: "逻辑实体唯一标识，形如 ENTITY-001。"
+
+  - name: 名称
+    key: name
+    location: meta
+    role: display_name
+    content_type: scalar
+    required: true
+    searchable: keyword
+    desc: "逻辑实体名称。"
+
+  - name: 简述
+    key: brief
+    location: meta
+    role: brief
+    content_type: scalar
+    required: true
+    searchable: vector
+    desc: "一句话概括实体的核心职责。"
+
+  - name: 描述
+    key: description
+    location: meta
+    role: description
+    content_type: scalar
+    required: false
+    searchable: vector
+    desc: "实体的业务职责、主要功能、设计意图的中等粒度说明。"
+
+  - name: 代码目录
+    key: directory
+    location: meta
+    role: directory_ref
+    content_type: scalar
+    required: false
+    searchable: keyword
+    desc: "实体映射到的代码目录路径（相对仓库根）。供后续代码符号检索器使用。"
+
+  - name: 概述
+    location: body
+    content_type: prose
+    required: true
+    searchable: vector
+    desc: "实体的详细描述，包含业务职责、主要功能、设计意图、在系统中的作用。"
+
+  - name: 实体结构
+    location: body
+    content_type: plantuml
+    required: true
+    searchable: false
+    indexable: false
+    desc: "PlantUML 类图，描述实体的属性与方法签名。"
+
+  - name: 属性说明
+    location: body
+    content_type: prose
+    required: true
+    searchable: vector
+    desc: "逐个属性的类型、用途、取值范围、约束条件。"
+
+  - name: 方法说明
+    location: body
+    content_type: prose
+    required: true
+    searchable: vector
+    desc: "逐个方法的函数签名、功能描述、输入输出、调用场景。"
+
+  - name: 职责说明
+    location: body
+    content_type: prose
+    required: true
+    searchable: vector
+    desc: "实体的核心职责、与其他实体的协作关系、在系统中的定位。"

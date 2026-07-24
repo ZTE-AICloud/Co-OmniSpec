@@ -1,0 +1,87 @@
+type_id: external_interface
+cardinality: multi
+desc: "外部接口，项目对外部系统/第三方库的接入点（HTTP、SDK 函数、命令等）。"
+id_pattern: "^EXTERNAL_API-\\d{3}$"
+file_pattern: "EXTERNAL_API-*.md"
+instance_format: markdown-with-frontmatter
+
+attributes:
+  - name: 标识
+    key: id
+    location: meta
+    role: identifier
+    content_type: scalar
+    required: true
+    searchable: keyword
+    desc: "外部接口唯一标识，形如 EXTERNAL_API-001。"
+
+  - name: 名称
+    key: name
+    location: meta
+    role: display_name
+    content_type: scalar
+    required: true
+    searchable: keyword
+    desc: "外部接口名称。"
+
+  - name: 源文件
+    key: file
+    location: meta
+    content_type: scalar
+    required: true
+    searchable: keyword
+    desc: "典型调用位置所在的源文件路径（相对仓库根）。"
+
+  - name: 接口类型
+    key: type
+    location: meta
+    content_type: scalar
+    required: true
+    searchable: keyword
+    desc: "接口类型，如 HTTP接口、SDK函数、CLI命令、消息主题等。"
+
+  - name: 简述
+    key: brief
+    location: meta
+    role: brief
+    content_type: scalar
+    required: true
+    searchable: vector
+    desc: "一句话概括外部接口在项目中的用途。"
+
+  - name: 描述
+    key: description
+    location: meta
+    role: description
+    content_type: scalar
+    required: false
+    searchable: vector
+    desc: "外部接口的使用场景与上下文。"
+
+  - name: 接口描述
+    location: body
+    content_type: prose
+    required: true
+    searchable: vector
+    desc: "外部接口的详细用途与使用场景。"
+
+  - name: 接口入口标识
+    location: body
+    content_type: prose
+    required: true
+    searchable: keyword
+    desc: "接口的入口签名，如 模块.函数名、类名::方法名、RESTful 路径等。"
+
+  - name: 接口参数
+    location: body
+    content_type: table
+    required: false
+    searchable: keyword
+    desc: "参数名、类型、是否必需、默认值、说明的表格。"
+
+  - name: 波及调用链
+    location: body
+    content_type: list
+    required: false
+    searchable: keyword
+    desc: "项目内部哪些代码路径最终调用到此外部接口，带文件位置与作用简述。"
